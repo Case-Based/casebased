@@ -1,0 +1,13 @@
+# This file contains values from Cookiecutter
+
+default_context:
+  project_name: "casebased"
+  project_description: "CaseBased is a python library that implements the priciples of case-based reasoning."
+  organization: "casebased"
+  license: "MIT"
+  minimal_python_version: 3.9
+  github_name: "casebased"
+  email: "casebased@gmail.com"
+  version: "0.1.0"
+  line_length: "88"
+  create_example_template: "none"
