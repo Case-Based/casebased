@@ -16,7 +16,7 @@ class Vocabulary:
 
     """
 
-    def __init__(self, features: List, targets: List, weights: List):
+    def __init__(self, features: List[str], targets: List, weights: List):
         self.features = features
         self.targets = targets
         self.weights = weights
