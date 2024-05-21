@@ -27,6 +27,8 @@ class CaseBase:
                 self.data = pd.read_json(source)
             elif extension == Extensions.XML:
                 self.data = pd.read_xml(source)
+            elif extension == Extensions.SQL:
+                self.data = pd.read_sql(source)
             else:
                 raise ValueError("No valid file extension")
         elif cb_type == CBTypes.KD_TREE:

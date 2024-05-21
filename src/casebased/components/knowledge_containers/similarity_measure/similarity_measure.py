@@ -30,8 +30,27 @@ from ..ontology.vocabulary import Vocabulary
 
 
 class SimilarityMeasure:
-    def kNN(self, case, vocabulary: Vocabulary, algorithm: str, k, cb: CaseBase):
-        return NearestNeighbors(n_neighbors=k, algorithm=algorithm).fit(cb)
+    def __init__(self, case_base: CaseBase, vocabulary: Vocabulary):
+        self.case_base = case_base
+        self.vocabulary = vocabulary
+
+    def get_k_similar(self, **kwargs):
+        k = kwargs.get("k")
+        algorithm = kwargs.get("algorithm")
+        weights = kwargs.get("weights")
+        case = kwargs.get("case")
+
+        neigh = KNeighborsClassifier(
+            n_neighbors=k, algorithm=algorithm, weights=weights, n_jobs=-1, p=2
+        )
+        neigh.fit(
+            self.case_base.data[self.vocabulary.features].values,
+            self.case_base.data[self.vocabulary.targets].values.reshape(
+                -1,
+            ),
+        )
+        return neigh.predict(case.values.reshape(1, -1))
+        # return NearestNeighbors(n_neighbors=k, algorithm=algorithm).fit(cb)
 
     def get_global_similarity(self, case, compare_case):
         """
