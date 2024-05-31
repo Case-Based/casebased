@@ -16,8 +16,12 @@ from sklearn.metrics import (
     roc_auc_score,
 )
 from sklearn.metrics.pairwise import pairwise_distances
-from sklearn.model_selection import train_test_split
-from sklearn.neighbors import KNeighborsClassifier, NearestNeighbors
+from sklearn.model_selection import GridSearchCV, train_test_split
+from sklearn.neighbors import (
+    KNeighborsClassifier,
+    KNeighborsRegressor,
+    NearestNeighbors,
+)
 from sklearn.preprocessing import LabelEncoder
 
 from ..case_base.casebase import CaseBase
@@ -33,24 +37,60 @@ class SimilarityMeasure:
     def __init__(self, case_base: CaseBase, vocabulary: Vocabulary):
         self.case_base = case_base
         self.vocabulary = vocabulary
+        self.classifier = None
+        self.Regressor = None
 
-    def get_k_similar(self, **kwargs):
+    def fit(self, **kwargs):
+        if kwargs.get("model"):
+            if kwargs.get("model") == "knn":
+                self._fit_classifier(**kwargs)
+            elif kwargs.get("model") == "regressor":
+                self._fit_regressor(**kwargs)
+        self._fit_classifier(**kwargs)
+
+    def _fit_classifier(self, **kwargs):
         k = kwargs.get("k")
         algorithm = kwargs.get("algorithm")
         weights = kwargs.get("weights")
-        case = kwargs.get("case")
+        query = kwargs.get("query")
 
-        neigh = KNeighborsClassifier(
+        x = self.case_base.data[self.vocabulary.features].values
+        y = self.case_base.data[self.vocabulary.targets].values.reshape(-1)
+
+        if k == "auto" or k is None or k == 0 or weights == "auto" or weights is None:
+            param_grid = {
+                "n_neighbors": range(1, 50),
+                "weights": ["uniform", "distance"],
+            }
+            grid_search = GridSearchCV(KNeighborsClassifier(), param_grid)
+            grid_search.fit(x, y)
+            print(grid_search.best_params_)
+            if k == "auto" or k is None or k == 0:
+                k = grid_search.best_params_["n_neighbors"]
+            if weights == "auto" or weights is None:
+                weights = grid_search.best_params_["weights"]
+
+        self.classifier = KNeighborsClassifier(
             n_neighbors=k, algorithm=algorithm, weights=weights, n_jobs=-1, p=2
         )
-        neigh.fit(
-            self.case_base.data[self.vocabulary.features].values,
-            self.case_base.data[self.vocabulary.targets].values.reshape(
-                -1,
-            ),
+
+        self.classifier.fit(x, y)
+
+    def classify(self, query):
+        return self.classifier.predict(query)
+
+    def get_k_similar_cases(self, query, k, return_distance=False, algorithm="auto"):
+        """
+        Get the k most similar cases to a given case
+        """
+        neighbors = NearestNeighbors(n_neighbors=k, algorithm=algorithm).fit(
+            self.case_base.data[self.vocabulary.features].values
         )
-        return neigh.predict(case.values.reshape(1, -1))
-        # return NearestNeighbors(n_neighbors=k, algorithm=algorithm).fit(cb)
+        if return_distance:
+            distances, indices = neighbors.kneighbors(query, return_distance=True)
+            return distances, indices
+        indices = neighbors.kneighbors(query.values, return_distance=False)
+        return indices
 
     def get_global_similarity(self, case, compare_case):
         """

@@ -2,6 +2,8 @@ import time
 
 import pandas as pd
 
+from src.casebased.actors.adapter.adapter import Adapter
+from src.casebased.actors.retriever.retriever import Retriever
 from src.casebased.components.knowledge_containers.case_base.casebase import CaseBase
 from src.casebased.components.knowledge_containers.case_base.constants import CBTypes
 from src.casebased.components.knowledge_containers.ontology.vocabulary import Vocabulary
@@ -9,48 +11,39 @@ from src.casebased.components.knowledge_containers.similarity_measure.similarity
     SimilarityMeasure,
 )
 
-new_case_idx = 125
-data = pd.read_csv("../test_data/diabetes.csv")
+if __name__ == "__main__":
+    new_case_idx = 0
+    data = pd.read_csv("../test_data/diabetes.csv")
 
-test = data.drop([0, 1, 2, 3, 4], axis=0)
+    test = data.iloc[new_case_idx]
+    print(test)
 
-columns = data.columns
-targets = ["Outcome"]
-features = [c for c in columns if c not in targets]
-weights = [1 for _ in features]
+    columns = data.columns
+    targets = ["Outcome"]
+    features = [c for c in columns if c not in targets]
+    weights = [1 for _ in features]
+    print(features, targets, weights)
+    vocab = Vocabulary(features, targets, weights)
 
-# Create Vocab
-vocab = Vocabulary(features, targets, weights)
+    case_base = CaseBase(cb_type=CBTypes.DF, source="../test_data/diabetes.csv")
 
-print(vocab.features)
-print(vocab.targets)
-print(vocab.weights)
-# Create Case Base
-case_base = CaseBase(
-    cb_type=CBTypes.DF, source="../test_data/diabetes.csv"
-)  # from source
+    case_base.data.drop([new_case_idx], inplace=True, axis=0)
+    case_base.data.reset_index(drop=True, inplace=True)
 
+    # get closest k cases to new case
+    case = test[vocab.features]
+    case = case.to_frame().T
 
-# get closest k cases to new case
-case = test.iloc[new_case_idx][vocab.features]
+    sim_measure = SimilarityMeasure(case_base, vocab)
 
-sim_measure = SimilarityMeasure(case_base, vocab)
+    retriever = Retriever(case_base, sim_measure, vocab)
+    distances, kSimilarCases = retriever.retrieve(
+        query=case, k=5, algorithm="auto", weights="auto", return_distance=True
+    )
+    print(kSimilarCases)
+    print(case_base.data.iloc[kSimilarCases[0]])
+    print(distances)
 
-start = time.time()
-prediction = sim_measure.get_k_similar(
-    case=case, algorithm="auto", k=3, weights="distance"
-)
-knn_runtime = time.time() - start
-
-
-print("#### TEST DATA ####")
-print(test.head())
-print("#### CASE BASE ####")
-print(case_base.data.head())
-print(case)
-print(prediction)
-print("#" * 50)
-print("Actual Outcome: ", case_base.data.iloc[new_case_idx]["Outcome"])
-print("Predicted Outcome: ", prediction)
-print("KNN Runtime: ", knn_runtime, " seconds")
-print("#" * 50)
+    adapter = Adapter(case_base, vocab)
+    solution = adapter.adapt(case, kSimilarCases)
+    print(solution)
