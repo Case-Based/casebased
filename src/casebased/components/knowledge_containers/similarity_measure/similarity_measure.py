@@ -1,29 +1,9 @@
 from typing import AnyStr
 
-import logging
+from sklearn.model_selection import GridSearchCV
+from sklearn.neighbors import KNeighborsClassifier, NearestNeighbors
 
-import numpy as np
-import pandas as pd
-from plotnine import *
-from scipy.optimize import fmin, fmin_cg, minimize
-from sklearn.datasets import load_breast_cancer, make_blobs, make_classification
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import (
-    accuracy_score,
-    confusion_matrix,
-    hinge_loss,
-    log_loss,
-    roc_auc_score,
-)
-from sklearn.metrics.pairwise import pairwise_distances
-from sklearn.model_selection import GridSearchCV, train_test_split
-from sklearn.neighbors import (
-    KNeighborsClassifier,
-    KNeighborsRegressor,
-    NearestNeighbors,
-)
-from sklearn.preprocessing import LabelEncoder
-
+from ...case.querycase import QueryCase
 from ..case_base.casebase import CaseBase
 from ..ontology.vocabulary import Vocabulary
 
@@ -44,8 +24,6 @@ class SimilarityMeasure:
         if kwargs.get("model"):
             if kwargs.get("model") == "knn":
                 self._fit_classifier(**kwargs)
-            elif kwargs.get("model") == "regressor":
-                self._fit_regressor(**kwargs)
         self._fit_classifier(**kwargs)
 
     def _fit_classifier(self, **kwargs):
@@ -79,17 +57,24 @@ class SimilarityMeasure:
     def classify(self, query):
         return self.classifier.predict(query)
 
-    def get_k_similar_cases(self, query, k, return_distance=False, algorithm="auto"):
+    def get_k_similar_cases(
+        self, query: QueryCase, k, return_distance=False, algorithm="auto"
+    ):
         """
         Get the k most similar cases to a given case
         """
-        neighbors = NearestNeighbors(n_neighbors=k, algorithm=algorithm).fit(
-            self.case_base.data[self.vocabulary.features].values
-        )
+        try:
+            X = self.case_base.data[self.vocabulary.features].values
+        except KeyError:
+            X = self.case_base.data[self.vocabulary.features].values
+
+        neighbors = NearestNeighbors(n_neighbors=k, algorithm=algorithm).fit(X)
         if return_distance:
             distances, indices = neighbors.kneighbors(query, return_distance=True)
             return distances, indices
-        indices = neighbors.kneighbors(query.values, return_distance=False)
+        indices = neighbors.kneighbors(
+            query.get_2d_feature_array(), return_distance=False
+        )
         return indices
 
     def get_global_similarity(self, case, compare_case):

@@ -1,9 +1,7 @@
-import pandas as pd
-
-from ..knowledge_containers.ontology.vocabulary import Vocabulary
+import numpy as np
 
 
-class Case:
+class QueryCase:
     """
     A Case is a Vector of Features and Targets located in the Case Base.
     Cases are experiences consisting of features and targets.
@@ -11,13 +9,11 @@ class Case:
     features and targets can be formulated as problem and solution.
     """
 
-    def __init__(
-        self, features: object, targets: object, vocabulary: Vocabulary, utility=0
-    ):
+    def __init__(self, features: dict, utility=0):
         # man könnte sagen, dass hier einfach ein data object übergeben wird
         # was features und targets sind enthält das vocabulary
         self.features = features
-        self.targets = targets
+        self.feature_values = list(features.values())
 
         # The amount of times the case is found in kNN or used otherwise
         #   (needed to prune unused cases in optimization)
@@ -26,8 +22,11 @@ class Case:
     def get_features(self):
         return self.features
 
-    def get_targets(self):
-        return self.targets
+    def get_1d_feature_array(self):
+        return np.array(self.feature_values)
+
+    def get_2d_feature_array(self):
+        return np.array(self.feature_values).reshape(1, -1)
 
     def __repr__(self):
-        return f"Case: {self.features} -> {self.targets}"
+        return f"Case: {self.features}"

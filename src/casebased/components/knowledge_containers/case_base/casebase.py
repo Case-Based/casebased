@@ -16,8 +16,7 @@ class CaseBase:
 
         # Hier würde ich sagen fangen wir erstmal mit Dataframes an
         # Dann können wir später noch KD-Trees implementieren
-        print(cb_type)
-        if cb_type == CBTypes.DF and self.data is None:
+        if cb_type == CBTypes.DF.value and self.data is None:
             extension = os.path.splitext(source)[-1]
             if extension == Extensions.CSV.value:
                 self.data = pd.read_csv(source)
