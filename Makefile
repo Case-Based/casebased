@@ -62,6 +62,14 @@ check-safety:
 .PHONY: lint
 lint: test check-codestyle mypy check-safety
 
+.PHONY: check
+check:
+	poetry run pre-commit run --all-files
+
+.PHONY: build
+build:
+	poetry build --verbose
+
 .PHONY: update-dev-deps
 update-dev-deps:
 	poetry add -D bandit@latest darglint@latest "isort[colors]@latest" mypy@latest pre-commit@latest pydocstyle@latest pylint@latest pytest@latest pyupgrade@latest safety@latest coverage@latest coverage-badge@latest pytest-html@latest pytest-cov@latest
@@ -99,7 +107,7 @@ mypycache-remove:
 
 .PHONY: ipynbcheckpoints-remove
 ipynbcheckpoints-remove:
-	find . | grep -E ".ipynb_checkpoints" | xargs rm -rf
+	find . | grep -E ".ipynb_checkpoints" | xargs rm -r
 
 .PHONY: pytestcache-remove
 pytestcache-remove:

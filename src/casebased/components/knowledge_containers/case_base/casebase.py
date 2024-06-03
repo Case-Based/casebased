@@ -1,32 +1,34 @@
 import os
+from pathlib import Path
 
 import pandas as pd
+from pandas._typing import FilePath
 
-from src.casebased.components.knowledge_containers.case_base.constants import (
+from casebased.components.knowledge_containers.case_base.constants import (
     CBTypes,
     Extensions,
 )
 
 
 class CaseBase:
-    def __init__(self, data=None, cb_type=None, source=None):
+    def __init__(self, data=None, cb_type=None, source: FilePath = None):
         self.data = data
         self.cb_type = cb_type
-        self.source: str = source
+        self.source: Path = source
 
         # Hier würde ich sagen fangen wir erstmal mit Dataframes an
         # Dann können wir später noch KD-Trees implementieren
-        if cb_type == CBTypes.DF.value and self.data is None:
+        if cb_type == CBTypes.DF.value or cb_type == CBTypes.DF and self.data is None:
             extension = os.path.splitext(source)[-1]
             if extension == Extensions.CSV.value:
                 self.data = pd.read_csv(source)
-            elif extension == Extensions.EXCEL:
+            elif extension == Extensions.EXCEL.value:
                 self.data = pd.read_excel(source)
-            elif extension == Extensions.JSON:
+            elif extension == Extensions.JSON.value:
                 self.data = pd.read_json(source)
-            elif extension == Extensions.XML:
+            elif extension == Extensions.XML.value:
                 self.data = pd.read_xml(source)
-            elif extension == Extensions.SQL:
+            elif extension == Extensions.SQL.value:
                 self.data = pd.read_sql(source)
             else:
                 raise ValueError("No valid file extension")

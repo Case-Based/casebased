@@ -1,6 +1,8 @@
 # content of test_class.py
-from src.casebased.components.case.querycase import QueryCase
-from src.casebased.components.knowledge_containers import (
+from pathlib import Path
+
+from casebased.components.case.querycase import QueryCase
+from casebased.components.knowledge_containers import (
     CaseBase,
     SimilarityMeasure,
     Vocabulary,
@@ -8,7 +10,7 @@ from src.casebased.components.knowledge_containers import (
 
 
 class TestSimilarityMeasure:
-    case_base = CaseBase(None, "df", "../regen.csv")
+    case_base = CaseBase(None, "df", Path("test_data/regen.csv"))
     features = [
         "Temperatur",
         "Luftfeuchtigkeit",
