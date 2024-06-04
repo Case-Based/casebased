@@ -2,12 +2,12 @@ import time
 
 import pandas as pd
 
-from src.casebased.actors.adapter.adapter import Adapter
-from src.casebased.actors.retriever.retriever import Retriever
-from src.casebased.components.knowledge_containers.case_base.casebase import CaseBase
-from src.casebased.components.knowledge_containers.case_base.constants import CBTypes
-from src.casebased.components.knowledge_containers.ontology.vocabulary import Vocabulary
-from src.casebased.components.knowledge_containers.similarity_measure.similarity_measure import (
+from casebased.actors.adapter.adapter import Adapter
+from casebased.actors.retriever.retriever import Retriever
+from casebased.components.knowledge_containers.case_base.casebase import CaseBase
+from casebased.components.knowledge_containers.case_base.constants import CBTypes
+from casebased.components.knowledge_containers.ontology.vocabulary import Vocabulary
+from casebased.components.knowledge_containers.similarity_measure.similarity_measure import (
     SimilarityMeasure,
 )
 

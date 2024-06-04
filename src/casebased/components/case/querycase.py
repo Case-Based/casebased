@@ -12,8 +12,14 @@ class QueryCase:
     def __init__(self, features: dict, utility=0):
         # man könnte sagen, dass hier einfach ein data object übergeben wird
         # was features und targets sind enthält das vocabulary
+        if not isinstance(features, dict):
+            raise ValueError("Features must be a dictionary")
+
         self.features = features
         self.feature_values = list(features.values())
+
+        if not all(isinstance(value, (int, float)) for value in self.feature_values):
+            raise ValueError("All features must be of type int or float")
 
         # The amount of times the case is found in kNN or used otherwise
         #   (needed to prune unused cases in optimization)

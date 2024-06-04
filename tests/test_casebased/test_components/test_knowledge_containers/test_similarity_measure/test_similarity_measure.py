@@ -1,16 +1,23 @@
 # content of test_class.py
+import os
 from pathlib import Path
 
 from casebased.components.case.querycase import QueryCase
-from casebased.components.knowledge_containers import (
-    CaseBase,
+from casebased.components.knowledge_containers.case_base.casebase import CaseBase
+from casebased.components.knowledge_containers.ontology.vocabulary import Vocabulary
+from casebased.components.knowledge_containers.similarity_measure.similarity_measure import (
     SimilarityMeasure,
-    Vocabulary,
 )
+
+print(os.getcwd())
+if "test_components" in os.getcwd():
+    source = Path("../../../../../test_data/regen.csv")
+else:
+    source = Path("test_data/regen.csv")
 
 
 class TestSimilarityMeasure:
-    case_base = CaseBase(None, "df", Path("test_data/regen.csv"))
+    case_base = CaseBase(None, "df", source)
     features = [
         "Temperatur",
         "Luftfeuchtigkeit",
