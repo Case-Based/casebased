@@ -1,5 +1,7 @@
 from typing import List
 
+from casebased.components.knowledge_containers.case_base.casebase import CaseBase
+
 
 class Vocabulary:
     """
@@ -16,10 +18,20 @@ class Vocabulary:
 
     """
 
-    def __init__(self, features: List[str], targets: List, weights: List):
+    def __init__(
+        self,
+        features: List[str],
+        targets: List,
+        weights: List,
+        retrieval_attributes=None,
+    ):
         self.features = features
         self.targets = targets
         self.weights = weights
+        if retrieval_attributes is None:
+            retrieval_attributes = features
+        else:
+            self.retrieval_attributes = retrieval_attributes
         return
 
     def add_feature(self, feature, position: int = -1):
@@ -44,6 +56,30 @@ class Vocabulary:
                     x for i, x in enumerate(self.features) if i in remove_feats
                 ]
                 self.features = [x for x in self.features if x not in remove_feat_names]
+
+    def compile_weights(self, casebase: CaseBase, method="korr"):
+        if method == "korr":
+            # TODO: Find solution for when targets are not in the data
+            #   or when targets are not the last columns
+            corr_mat = (
+                casebase.data[self.features + self.targets]
+                .corr()[self.targets]
+                .iloc[:-1]
+            )
+            print(corr_mat)
+            self.weights = corr_mat.values.flatten()
+        elif method == "auto":
+            self.weights = [1] * len(self.features)
+        return
+
+    def add_target(self, target, position: int = -1):
+        if target in self.targets:
+            return
+        if position == -1:
+            self.targets.append(target)
+        else:
+            self.targets.insert(position, target)
+        return
 
     # TODO: Logic for virtual attributes
     # TODO: Logic for subcontainers: Retrieval

@@ -17,7 +17,7 @@ class Retriever:
         query: QueryCase,
         k: int,
         algorithm="auto",
-        weights="auto",
+        weighted=False,
         return_distance: bool = False,
     ):
         return self.similarity_measure.get_k_similar_cases(
@@ -25,4 +25,5 @@ class Retriever:
             k=k,
             algorithm="auto",
             return_distance=return_distance,
+            weighted=weighted,
         )

@@ -30,6 +30,9 @@ if __name__ == "__main__":
     case_base.data.drop([new_case_idx], inplace=True, axis=0)
     case_base.data.reset_index(drop=True, inplace=True)
 
+    vocab.compile_weights(case_base, method="korr")
+    print(vocab.weights)
+
     # get closest k cases to new case
     case = test[vocab.features]
     case = case.to_frame().T
@@ -38,7 +41,7 @@ if __name__ == "__main__":
 
     retriever = Retriever(case_base, sim_measure, vocab)
     distances, kSimilarCases = retriever.retrieve(
-        query=case, k=5, algorithm="auto", weights="auto", return_distance=True
+        query=case, k=5, algorithm="auto", weighted=True, return_distance=True
     )
     print(kSimilarCases)
     print(case_base.data.iloc[kSimilarCases[0]])

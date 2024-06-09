@@ -58,17 +58,30 @@ class SimilarityMeasure:
         return self.classifier.predict(query)
 
     def get_k_similar_cases(
-        self, query: QueryCase, k, return_distance=False, algorithm="auto"
+        self,
+        query: QueryCase,
+        k,
+        return_distance=False,
+        algorithm="auto",
+        weighted=False,
     ):
         """
         Get the k most similar cases to a given case
         """
         try:
-            X = self.case_base.data[self.vocabulary.features].values
+            x = self.case_base.data[self.vocabulary.features].values
         except KeyError:
-            X = self.case_base.data[self.vocabulary.features].values
+            x = self.case_base.data[self.vocabulary.features].values
 
-        neighbors = NearestNeighbors(n_neighbors=k, algorithm=algorithm).fit(X)
+        if weighted:
+            neighbors = NearestNeighbors(
+                n_neighbors=k,
+                algorithm=algorithm,
+                metric="minkowski",
+                metric_params={"w": self.vocabulary.weights},
+            ).fit(x)
+        else:
+            neighbors = NearestNeighbors(n_neighbors=k, algorithm=algorithm).fit(x)
         if return_distance:
             distances, indices = neighbors.kneighbors(query, return_distance=True)
             return distances, indices
