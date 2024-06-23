@@ -32,7 +32,7 @@ class SimilarityMeasure:
         weights = kwargs.get("weights")
         query = kwargs.get("query")
 
-        x = self.case_base.data[self.vocabulary.features].values
+        x = self.case_base.data[self.vocabulary.feature_names].values
         y = self.case_base.data[self.vocabulary.targets].values.reshape(-1)
 
         if k == "auto" or k is None or k == 0 or weights == "auto" or weights is None:
@@ -42,7 +42,6 @@ class SimilarityMeasure:
             }
             grid_search = GridSearchCV(KNeighborsClassifier(), param_grid)
             grid_search.fit(x, y)
-            print(grid_search.best_params_)
             if k == "auto" or k is None or k == 0:
                 k = grid_search.best_params_["n_neighbors"]
             if weights == "auto" or weights is None:
@@ -69,9 +68,9 @@ class SimilarityMeasure:
         Get the k most similar cases to a given case
         """
         try:
-            x = self.case_base.data[self.vocabulary.features].values
+            x = self.case_base.data[self.vocabulary.feature_names].values
         except KeyError:
-            x = self.case_base.data[self.vocabulary.features].values
+            x = self.case_base.data[self.vocabulary.feature_names].values
 
         if weighted:
             neighbors = NearestNeighbors(

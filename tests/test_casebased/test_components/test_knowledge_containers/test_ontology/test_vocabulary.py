@@ -8,7 +8,7 @@ class TestVocabulary:
 
     def test__init__(self):
         vocabulary = Vocabulary(self.features, self.targets, self.weights)
-        assert vocabulary.features == self.features
+        assert vocabulary.feature_names == self.features
         assert vocabulary.targets == self.targets
         assert vocabulary.weights == self.weights
 
@@ -17,7 +17,7 @@ class TestVocabulary:
         feature = "pressure"
         vocabulary = Vocabulary(self.features, self.targets, self.weights)
         vocabulary.add_feature(feature)
-        assert vocabulary.features == [
+        assert vocabulary.feature_names == [
             "latitude",
             "longitude",
             "humidity",
@@ -32,14 +32,14 @@ class TestVocabulary:
         vocabulary_def.add_feature(feature)
         vocabulary_last = Vocabulary(self.features, self.targets, self.weights)
         vocabulary_last.add_feature(feature, -1)
-        assert vocabulary_def.features == vocabulary_last.features
+        assert vocabulary_def.feature_names == vocabulary_last.feature_names
 
     def test_add_feature_insert(self):
         self.features = ["latitude", "longitude", "humidity", "temperature"]
         feature = "pressure"
         vocabulary = Vocabulary(self.features, self.targets, self.weights)
         vocabulary.add_feature(feature, 2)
-        assert vocabulary.features == [
+        assert vocabulary.feature_names == [
             "latitude",
             "longitude",
             "pressure",
@@ -52,32 +52,32 @@ class TestVocabulary:
         feature = "latitude"
         vocabulary = Vocabulary(self.features, self.targets, self.weights)
         vocabulary.add_feature(feature)
-        assert vocabulary.features == self.features
+        assert vocabulary.feature_names == self.features
 
     def test_remove_feature_name(self):
         self.features = ["latitude", "longitude", "humidity", "temperature"]
         feature = "humidity"
         vocabulary = Vocabulary(self.features, self.targets, self.weights)
         vocabulary.remove_feature(feature)
-        assert vocabulary.features == ["latitude", "longitude", "temperature"]
+        assert vocabulary.feature_names == ["latitude", "longitude", "temperature"]
 
     def test_remove_feature_index(self):
         self.features = ["latitude", "longitude", "humidity", "temperature"]
         feature = 2
         vocabulary = Vocabulary(self.features, self.targets, self.weights)
         vocabulary.remove_feature(feature)
-        assert vocabulary.features == ["latitude", "longitude", "temperature"]
+        assert vocabulary.feature_names == ["latitude", "longitude", "temperature"]
 
     def test_remove_feature_list(self):
         self.features = ["latitude", "longitude", "humidity", "temperature"]
         feature = ["latitude", "humidity"]
         vocabulary = Vocabulary(self.features, self.targets, self.weights)
         vocabulary.remove_feature(feature)
-        assert vocabulary.features == ["longitude", "temperature"]
+        assert vocabulary.feature_names == ["longitude", "temperature"]
 
     def test_remove_feature_list_index(self):
         self.features = ["latitude", "longitude", "humidity", "temperature"]
         feature = [0, 2]
         vocabulary = Vocabulary(self.features, self.targets, self.weights)
         vocabulary.remove_feature(feature)
-        assert vocabulary.features == ["longitude", "temperature"]
+        assert vocabulary.feature_names == ["longitude", "temperature"]

@@ -9,7 +9,6 @@ from casebased.components.knowledge_containers.similarity_measure.similarity_mea
     SimilarityMeasure,
 )
 
-print(os.getcwd())
 if "test_components" in os.getcwd():
     source = Path("../../../../../test_data/regen.csv")
 else:
@@ -28,7 +27,6 @@ class TestSimilarityMeasure:
     ]
     targets = ["Regen?"]
     vocabulary = Vocabulary(features, targets, [1, 1, 1, 1, 1, 1])
-    print(case_base.data)
 
     def test_get_k_similar_cases(self):
         similarity_measure = SimilarityMeasure(self.case_base, self.vocabulary)
