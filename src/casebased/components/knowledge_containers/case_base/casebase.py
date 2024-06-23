@@ -2,7 +2,6 @@ import os
 from pathlib import Path
 
 import pandas as pd
-from pandas._typing import FilePath
 
 from casebased.components.knowledge_containers.case_base.constants import (
     CBTypes,
@@ -11,7 +10,7 @@ from casebased.components.knowledge_containers.case_base.constants import (
 
 
 class CaseBase:
-    def __init__(self, data=None, cb_type=None, source: FilePath = None):
+    def __init__(self, data=None, cb_type=None, source=None):
         self.data = data
         self.cb_type = cb_type
         self.source: Path = source

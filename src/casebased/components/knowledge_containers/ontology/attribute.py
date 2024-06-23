@@ -1,4 +1,4 @@
-from typing import Any, Optional, Union
+from typing import Any, Optional, Type, Union
 
 import numpy as np
 
@@ -12,7 +12,7 @@ class Attribute:
         min_value: Union[float, int],
         max_value: Union[float, int],
         weight: Optional[float],
-        data_type: tuple[type],
+        data_type: tuple[Type[Any]],
         exclusive_min: bool = False,
         exclusive_max: bool = False,
     ):
@@ -146,15 +146,14 @@ class TargetAttribute(Attribute):
     def __init__(
         self,
         name: str,
-        min_value: Union[float, int],
-        max_value: Union[float, int],
-        weight: float,
-        data_type: tuple[type],
+        data_type: tuple[Type[Any]],
+        min_value: Union[float, int] = -np.Inf,
+        max_value: Union[float, int] = np.Inf,
         exclusive_min: bool = False,
         exclusive_max: bool = False,
     ):
         super().__init__(
-            name, min_value, max_value, weight, data_type, exclusive_min, exclusive_max
+            name, min_value, max_value, None, data_type, exclusive_min, exclusive_max
         )
         self.target = True
 
@@ -163,13 +162,14 @@ class FeatureAttribute(Attribute):
     def __init__(
         self,
         name: str,
-        min_value: Union[float, int],
-        max_value: Union[float, int],
-        data_type: tuple[type],
+        data_type: tuple[Type[Any]],
+        min_value: Union[float, int] = -np.Inf,
+        max_value: Union[float, int] = np.Inf,
+        weight: float = 1.0,
         exclusive_min: bool = False,
         exclusive_max: bool = False,
     ):
         super().__init__(
-            name, min_value, max_value, None, data_type, exclusive_min, exclusive_max
+            name, min_value, max_value, weight, data_type, exclusive_min, exclusive_max
         )
         self.target = False

@@ -4,29 +4,35 @@ from pathlib import Path
 
 from casebased.components.case.querycase import QueryCase
 from casebased.components.knowledge_containers.case_base.casebase import CaseBase
+from casebased.components.knowledge_containers.ontology.attribute import (
+    FeatureAttribute,
+    TargetAttribute,
+)
 from casebased.components.knowledge_containers.ontology.vocabulary import Vocabulary
 from casebased.components.knowledge_containers.similarity_measure.similarity_measure import (
     SimilarityMeasure,
 )
 
-if "test_components" in os.getcwd():
-    source = Path("../../../../../test_data/regen.csv")
+if "tests" in os.getcwd():
+    source = Path("../test_data/regen.csv")
 else:
     source = Path("test_data/regen.csv")
 
 
 class TestSimilarityMeasure:
     case_base = CaseBase(None, "df", source)
-    features = [
-        "Temperatur",
-        "Luftfeuchtigkeit",
-        "Luftdruck",
-        "Windgeschwindigkeit",
-        "Laengengrad",
-        "Breitengrad",
-    ]
-    targets = ["Regen?"]
-    vocabulary = Vocabulary(features, targets, [1, 1, 1, 1, 1, 1])
+    temp_attr = FeatureAttribute("Temperatur", (int, float), -50, 50)
+    hum_attr = FeatureAttribute("Luftfeuchtigkeit", (int, float), 0, 100)
+    press_attr = FeatureAttribute("Luftdruck", (int, float), 900, 1100)
+    wind_attr = FeatureAttribute("Windgeschwindigkeit", (int, float), 0, 100)
+    long_attr = FeatureAttribute("Laengengrad", (int, float), -180, 180)
+    lat_attr = FeatureAttribute("Breitengrad", (int, float), -90, 90)
+
+    target_attr = TargetAttribute("Regen?", (bool), 0, 1)
+
+    features = [temp_attr, hum_attr, press_attr, wind_attr, long_attr, lat_attr]
+    targets = [target_attr]
+    vocabulary = Vocabulary(features, targets)
 
     def test_get_k_similar_cases(self):
         similarity_measure = SimilarityMeasure(self.case_base, self.vocabulary)
