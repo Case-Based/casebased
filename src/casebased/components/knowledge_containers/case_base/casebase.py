@@ -1,23 +1,25 @@
 import os
 from pathlib import Path
-
 import pandas as pd
 from pandas._typing import FilePath
+
+# Short description: This class is the main class for the case base. It is responsible for storing the cases and managing them.
+# Data is being stored in a pandas dataframe. The class provides methods to add and remove cases from the case base.
 
 from casebased.components.knowledge_containers.case_base.constants import (
     CBTypes,
     Extensions,
 )
 
-
 class CaseBase:
+
     def __init__(self, data=None, cb_type=None, source: FilePath = None):
+
         self.data = data
         self.cb_type = cb_type
         self.source: Path = source
 
-        # Hier würde ich sagen fangen wir erstmal mit Dataframes an
-        # Dann können wir später noch KD-Trees implementieren
+        # TODO for later: implement 
         if cb_type == CBTypes.DF.value or cb_type == CBTypes.DF and self.data is None:
             extension = os.path.splitext(source)[-1]
             if extension == Extensions.CSV.value:
@@ -35,14 +37,63 @@ class CaseBase:
         elif cb_type == CBTypes.KD_TREE:
             pass
 
-    def clean_unused_cases(self):
-        pass
+    
+    def verfiy_case_structure(self, case: dict) -> bool:
 
-    def add_case(self, case):
-        pass
+        if set(case.keys()) == set(self.data.columns): 
+            return True
+        else: 
+            return False
 
-    def remove_case(self, case):
-        pass
+    def get_position_of_case(self, value):
+        
+        indexes = []
+        for column in self.data.columns:
+            column_indexes = self.data.index[self.data[column] == value].tolist()
+            indexes.extend(column_indexes)
+        return sorted(set(indexes))
 
-    def get_case(self, query):
-        pass
+    def add_case(self, case: dict):
+        if set(case.keys()) != set(self.df.columns):
+            raise ValueError("Case structure does not match dataframe structure")
+
+        newDf = pd.DataFrame([case])
+        self.df = self.df._append(newDf, ignore_index=True)
+
+        return self.df
+    
+    def delete_case_by_index(df: pd.DataFrame, index: int) -> pd.DataFrame:
+
+        if index not in df.index:
+            raise ValueError(f"Index {index} not found in DataFrame")
+        
+        df = df.drop(index)
+        return df.reset_index(drop=True) 
+    
+    def update_case(self, case_index: int, updated_case : dict):
+        try: 
+            if case_index.empty or self.verfiy_case_structure(updated_case) == False:
+                raise ValueError(f"Case with Fallnummer {case_index} not found")
+
+            for key, value in updated_case.items():
+                if key in self.data.columns:
+                    self.data.at[case_index[0], key] = value
+                else:
+                    raise KeyError(f"Column {key} does not exist in the dataframe")
+                
+        except Exception as e:  
+
+            print(f"Error updating case: {e}")
+            return False
+    
+    def remove_cases_with_missing_values(self):
+        """
+        Remove cases (rows) with any missing values from the case base.
+        """
+        self.data = self.data.dropna()
+
+    def remove_duplicate_cases(self): 
+        # TODO How to deal with cases that are the same but the number of the case is different?
+        # return self.data.drop_duplicates(subset=None, keep='first', inplace=False)
+        pass 
+
