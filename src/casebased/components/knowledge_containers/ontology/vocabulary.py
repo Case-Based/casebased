@@ -1,6 +1,4 @@
-from typing import List
-
-import numpy as np
+from typing import List, Union
 
 from casebased.components.knowledge_containers.case_base.casebase import CaseBase
 from casebased.components.knowledge_containers.ontology.attribute import (
@@ -66,7 +64,7 @@ class Vocabulary:
             self.add_retrieval_attribute(f_name)
         return
 
-    def remove_feature(self, remove_feats: str | int | list[str] | list[int]):
+    def remove_feature(self, remove_feats: Union[str, int, list[str], list[int]]):
         """
         Remove a feature from the vocabulary and updates the feature names and weights.
         Args:
@@ -79,7 +77,7 @@ class Vocabulary:
         self.__sync_weights()
 
     def add_retrieval_attribute(
-        self, attribute: FeatureAttribute | str, position: int = -1
+        self, attribute: Union[FeatureAttribute, str], position: int = -1
     ):
         """
         Add a retrieval attribute to the vocabulary.
@@ -144,7 +142,7 @@ class Vocabulary:
         self.__sync_targets()
         return
 
-    def remove_target(self, remove_targets: str | int | list[str] | list[int]):
+    def remove_target(self, remove_targets: Union[str, int, list[str], list[int]]):
         """
         Remove a target from the vocabulary.
         Args:
@@ -168,7 +166,7 @@ class Vocabulary:
         return
 
     @staticmethod
-    def __remove_attribute(remove_attr: str | int | list[str] | list[int], attributes):
+    def __remove_attribute(remove_attr: Union[str, int, list[str], list[int]], attributes):
         if isinstance(remove_attr, str):
             attributes = [x for x in attributes if x.name != remove_attr]
         elif isinstance(remove_attr, int):
