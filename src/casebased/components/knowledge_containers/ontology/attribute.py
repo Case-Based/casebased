@@ -40,8 +40,8 @@ class Attribute:
     def from_name_string(name: str):
         return Attribute(
             name=name,
-            min_value=-np.Inf,
-            max_value=np.Inf,
+            min_value=-np.inf,
+            max_value=np.inf,
             weight=1.0,
             data_type=Any,
             exclusive_min=False,
@@ -147,8 +147,8 @@ class TargetAttribute(Attribute):
         self,
         name: str,
         data_type: tuple[Type[Any]],
-        min_value: Union[float, int] = -np.Inf,
-        max_value: Union[float, int] = np.Inf,
+        min_value: Union[float, int] = -np.inf,
+        max_value: Union[float, int] = np.inf,
         exclusive_min: bool = False,
         exclusive_max: bool = False,
     ):
@@ -163,8 +163,8 @@ class FeatureAttribute(Attribute):
         self,
         name: str,
         data_type: tuple[Type[Any]],
-        min_value: Union[float, int] = -np.Inf,
-        max_value: Union[float, int] = np.Inf,
+        min_value: Union[float, int] = -np.inf,
+        max_value: Union[float, int] = np.inf,
         weight: float = 1.0,
         exclusive_min: bool = False,
         exclusive_max: bool = False,
