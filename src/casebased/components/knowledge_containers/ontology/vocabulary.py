@@ -166,7 +166,9 @@ class Vocabulary:
         return
 
     @staticmethod
-    def __remove_attribute(remove_attr: Union[str, int, list[str], list[int]], attributes):
+    def __remove_attribute(
+        remove_attr: Union[str, int, list[str], list[int]], attributes
+    ):
         if isinstance(remove_attr, str):
             attributes = [x for x in attributes if x.name != remove_attr]
         elif isinstance(remove_attr, int):
