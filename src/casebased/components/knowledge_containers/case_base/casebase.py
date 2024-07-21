@@ -5,15 +5,18 @@ from pandas._typing import FilePath
 
 # Short description: This class is the main class for the case base. It is responsible for storing the cases and managing them.
 # Data is being stored in a pandas dataframe. The class provides methods to add and remove cases from the case base.
+from constants import CBTypes, Extensions
 
-from casebased.components.knowledge_containers.case_base.constants import (
-    CBTypes,
-    Extensions,
-)
+# from casebased.components.knowledge_containers.case_base.constants import (
+#     CBTypes,
+#     Extensions,
+# )
 
 class CaseBase:
 
     def __init__(self, data=None, cb_type=None, source: FilePath = None):
+
+        # self.data contains the panada dataframes (hat stores the cases)
 
         self.data = data
         self.cb_type = cb_type
@@ -45,8 +48,8 @@ class CaseBase:
         else: 
             return False
 
-    def get_position_of_case(self, value):
-        
+    def get_index_of_case(self, value: int):
+
         indexes = []
         for column in self.data.columns:
             column_indexes = self.data.index[self.data[column] == value].tolist()
@@ -54,13 +57,12 @@ class CaseBase:
         return sorted(set(indexes))
 
     def add_case(self, case: dict):
-        if set(case.keys()) != set(self.df.columns):
+        if set(self.data) != set(case):
             raise ValueError("Case structure does not match dataframe structure")
 
-        newDf = pd.DataFrame([case])
-        self.df = self.df._append(newDf, ignore_index=True)
-
-        return self.df
+        single_case = pd.DataFrame(case, index=[0])
+        self.data = self.data._append(single_case, ignore_index=True)
+        return self.data
     
     def delete_case_by_index(df: pd.DataFrame, index: int) -> pd.DataFrame:
 
@@ -72,12 +74,13 @@ class CaseBase:
     
     def update_case(self, case_index: int, updated_case : dict):
         try: 
-            if case_index.empty or self.verfiy_case_structure(updated_case) == False:
-                raise ValueError(f"Case with Fallnummer {case_index} not found")
+            case_index =+ 1
+            # if case_index.empty or self.verfiy_case_structure(updated_case) == False:
+            #     raise ValueError(f"Case with Fallnummer {case_index} not found")
 
             for key, value in updated_case.items():
                 if key in self.data.columns:
-                    self.data.at[case_index[0], key] = value
+                    self.data.at[case_index, key] = value
                 else:
                     raise KeyError(f"Column {key} does not exist in the dataframe")
                 
@@ -90,7 +93,11 @@ class CaseBase:
         """
         Remove cases (rows) with any missing values from the case base.
         """
-        self.data = self.data.dropna()
+        for column in self.data.columns:
+            if self.data is None:
+                self.data.dropna(inplace=True)
+
+        return self.data
 
     def remove_duplicate_cases(self): 
         # TODO How to deal with cases that are the same but the number of the case is different?

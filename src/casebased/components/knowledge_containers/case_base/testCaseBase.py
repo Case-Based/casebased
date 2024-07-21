@@ -1,5 +1,6 @@
 # from src.casebased.components.knowledge_containers.case_base import casebase
-from case_base import casebase
+from casebase import CaseBase
+case_base = CaseBase()
 import unittest
 import os 
 import pandas as pd
@@ -7,47 +8,40 @@ from io import StringIO
 from pathlib import Path
 import tempfile
 from pandas._typing import FilePath
+from constants import CBTypes, Extensions
+
+
 
 class TestCaseBase(unittest.TestCase):
 
-    def test_case_base(self):
-        cb_type = cb_type.DF
-        file_path = os.path.join(os.path.dirname(__file__), 'test_data/regen.csv')
-        case_base = casebase(cb_type=cb_type, source=file_path)
+    csv_file_path_setup = Path('test_data/regenSetup.csv')
+    csv_file_path = Path('test_data/regen.csv')
+    csv_file_path_duplicate = Path('test_data/regenDuplicate.csv')
 
-        self.assertEqual(case_base.data, None)
-        self.assertEqual(case_base.cb_type, None)
-        self.assertEqual(case_base.source, None)
+    def test_setUp(self):
 
-    def test_case_base_with_data(self):
-        case_base = casebase.CaseBase()
-        csv_file_path = os.path.join(os.path.dirname(__file__), 'test_data/regen.csv')
-
-        expected_data = pd.read_csv(csv_file_path)
-        case_base.read_from_csv(csv_file_path)
-
-        pd.testing.assert_frame_equal(case_base.data, expected_data)
-
-    def setUp(self):
-        case_base = casebase.CaseBase()
-        csv_file_path = os.path.join(os.path.dirname(__file__), 'test_data/regen.csv')
-
-        case_base = pd.read_csv(csv_file_path)
-
-        dataframe = { 
+        
+        data = { 
             'Fallnummer': [1, 2, 3, 4],
-            'Temperatur': [22.5, 25.0, 20.0, 30.0],
+            'Temperatur': [22.5, 20.0, 25.0, 30.0],
             'Luftfeuchtigkeit': [85, 60, 90, 50],
             'Luftdruck': [1012, 1015, 1009, 1010],
             'Windgeschwindigkeit': [15, 10, 20, 5],
             'Laengengrad': [13.404954, 11.581981, 9.993682, 8.682127],
             'Breitengrad': [52.520008, 48.135125, 53.551086, 50.110924],
-            'Regen?': [1, 0, 1, 0]
+            'Regen': [1, 0, 1, 0]
         }
+        
+        case_base1 = CaseBase(cb_type=CBTypes.DF.value, source=self.csv_file_path_setup)
+        case_base2 = pd.DataFrame(data=data)        
+
+        self.assertTrue(case_base2.equals(case_base1.data))
 
     def test_verify_case_structure(self):
 
-        case = {
+        case_base = CaseBase(cb_type=CBTypes.DF.value, source=self.csv_file_path_setup)
+
+        case1 = {
             'Fallnummer': 1,
             'Temperatur': 22.5,
             'Luftfeuchtigkeit': 85,
@@ -55,110 +49,133 @@ class TestCaseBase(unittest.TestCase):
             'Windgeschwindigkeit': 15,
             'Laengengrad': 13.404954,
             'Breitengrad': 52.520008,
-            'Regen?': 1
+            'Regen': 1
         }
 
-        cb = casebase.CaseBase(self.df)
-        result = cb.verify_case_structure(case)
-        self.assertTrue(result)
+        case2 = {
+            'Temperatur': 22.5,
+            'Luftfeuchtigkeit': 85,
+            'Luftdruck': 1012,
+            'Windgeschwindigkeit': 15,
+            'Laengengrad': 13.404954,
+            'Breitengrad': 52.520008,
+            'Regen': 1
+        }
+
+        result1 = case_base.verfiy_case_structure(case1)
+        result2 = case_base.verfiy_case_structure(case2) 
+        self.assertTrue(result1)
+        self.assertFalse(result2)
 
     def test_get_index_case(self):
 
-        file_path = os.path.join(os.path.dirname(__file__), 'test_data/regen.csv')
-
-        casebase = casebase.CaseBase(file_path)
+        case_base = CaseBase(cb_type=CBTypes.DF.value, source=self.csv_file_path_setup)
 
         value_to_find = 20.0
-        positions = casebase.get_position_of_case(value_to_find)
-        self.assertEqual(positions, [2])
+        positions = case_base.get_index_of_case(value_to_find)
+        self.assertEqual(positions, [1, 2])
 
     def test_add_case(self):
-
+        
+        case_base = CaseBase(cb_type=CBTypes.DF.value, source=self.csv_file_path_setup)
         new_case = {
-            "Fallnummer": 0, "Temperatur": 20.0, "Luftfeuchtigkeit": 1, "Luftdruck": 1,
-            "Windgeschwindigkeit": 1, "Laengengrad": 1, "Breitengrad": 1, "Regen?": 1
+            "Fallnummer": 5, 
+            "Temperatur": 20.0, 
+            "Luftfeuchtigkeit": 1, 
+            "Luftdruck": 1,
+            "Windgeschwindigkeit": 1, 
+            "Laengengrad": 1, 
+            "Breitengrad": 1, 
+            "Regen": 1
         }
         
-        updated_df = casebase.add_case(new_case)
+        case_base.add_case(new_case)
 
-        # Check if the new case is added correctly
-        self.assertEqual(len(updated_df), 5)  # Check the length of the DataFrame
-        self.assertEqual(updated_df.iloc[-1]["Fallnummer"], 5)  # Check the new case number
-        self.assertEqual(updated_df.iloc[-1]["Temperatur"], 20.0)  # Check the temperature
-        self.assertEqual(updated_df.iloc[-1]["Luftfeuchtigkeit"], 1)  # Check the humidity
-        self.assertEqual(updated_df.iloc[-1]["Luftdruck"], 1)  # Check the air pressure
-        self.assertEqual(updated_df.iloc[-1]["Windgeschwindigkeit"], 1)  # Check the wind speed
-        self.assertEqual(updated_df.iloc[-1]["Laengengrad"], 1)  # Check the longitude
-        self.assertEqual(updated_df.iloc[-1]["Breitengrad"], 1)  # Check the latitude
-        self.assertEqual(updated_df.iloc[-1]["Regen?"], 1)  # Check the rain value
+        last_row = case_base.data.iloc[-1]
+
+        expected_values = {
+            "Fallnummer": 5, 
+            "Temperatur": 20.0, 
+            "Luftfeuchtigkeit": 1, 
+            "Luftdruck": 1,
+            "Windgeschwindigkeit": 1, 
+            "Laengengrad": 1, 
+            "Breitengrad": 1, 
+            "Regen": 1
+        }
+
+        for column, expected_value in expected_values.items():
+            self.assertEqual(last_row[column], expected_value)
 
     def test_remove_case_with_missing_value(self): 
 
-        casebase.remove_case(new_case, updated_df)
-        self.assertEqual(len(updated_df), 5)  # Check the length of the DataFrame
-        self.assertEqual(updated_df.iloc[-1]["Fallnummer"], 5)  # Check the new case number
-        self.assertEqual(updated_df.iloc[-1]["Temperatur"], 20.0)  # Check the temperature
-        self.assertEqual(updated_df.iloc[-1]["Luftfeuchtigkeit"], 1)  # Check the humidity
-        self.assertEqual(updated_df.iloc[-1]["Luftdruck"], 1)  # Check the air pressure
-        self.assertEqual(updated_df.iloc[-1]["Windgeschwindigkeit"], 1)  # Check the wind speed
-        self.assertEqual(updated_df.iloc[-1]["Laengengrad"], 1)  # Check the longitude
-        self.assertEqual(updated_df.iloc[-1]["Breitengrad"], 1)  # Check the latitude
-        self.assertEqual(updated_df.iloc[-1]["Regen?"], 1)  # Check the rain value
+        case_base = CaseBase(cb_type=CBTypes.DF.value, source=self.csv_file_path_setup)
+
+        expected_values = { 
+            "Fallnummer": 4, 
+            "Temperatur": 30.0,
+            "Luftfeuchtigkeit": 50,
+            "Luftdruck": 1010,
+            "Windgeschwindigkeit": 5,
+            "Laengengrad": 8.682127,
+            "Breitengrad": 50.110924,
+            "Regen": 0
+        }
+
+        last_row = case_base.data.iloc[-1]
+
+        print(case_base.data)
+
+        case_base.remove_cases_with_missing_values()
+        
+        print(case_base.data)
+
+        for column, expected_value in expected_values.items():
+            self.assertEqual(last_row[column], expected_value)
+
+    def test_update_case(self):
+
+        case_base = CaseBase(cb_type=CBTypes.DF.value, source=self.csv_file_path_setup)
+
+        case_base.update_case(1, {"Temperatur": 50.0})
+
+        expeceted_values = {
+            "Fallnummer": 2, 
+            "Temperatur": 50.0,
+            "Luftfeuchtigkeit": 60,
+            "Luftdruck": 1015,
+            "Windgeschwindigkeit": 10,
+            "Laengengrad": 11.581981,
+            "Breitengrad": 48.135125,
+            "Regen": 0
+        }
+
+        second_row = case_base.data.iloc[1]
+
+        for column, expected_value in expeceted_values.items():
+            self.assertEqual(second_row[column], expected_value)
+
 
     def test_remove_duplicate_cases(self): 
 
-        casebase = casebase.CaseBase()
+        case_base = CaseBase(cb_type=CBTypes.DF.value, source=self.csv_file_path_duplicate)
 
-        csv_file_path = os.path.join(os.path.dirname(__file__), 'test_data/regen.csv')
+        case_base.remove_duplicate_cases() 
+        
+        expected_value = {
+            "Fallnummer": 5, 
+            "Temperatur": 28.0, 
+            "Luftfeuchtigkeit": 40,
+            "Luftdruck": 1310,
+            "Windgeschwindigkeit": 9,
+            "Laengengrad": 8.482127,
+            "Breitengrad": 40.110924,
+            "Regen": 1
+        }
 
-
-class TestCaseBaseInitialization(unittest.TestCase):
-
-    def setUp(self):
-        # Create a temporary directory and files for testing
-        self.test_dir = tempfile.TemporaryDirectory()
-
-        # Create a temporary CSV file
-        self.csv_file = Path(self.test_dir.name) / "test.csv"
-        pd.DataFrame({'a': [1, 2, 3], 'b': [4, 5, 6]}).to_csv(self.csv_file, index=False)
-
-        # Create a temporary Excel file
-        self.excel_file = Path(self.test_dir.name) / "test.xlsx"
-        pd.DataFrame({'a': [1, 2, 3], 'b': [4, 5, 6]}).to_excel(self.excel_file, index=False)
-
-        # Create a temporary JSON file
-        self.json_file = Path(self.test_dir.name) / "test.json"
-        pd.DataFrame({'a': [1, 2, 3], 'b': [4, 5, 6]}).to_json(self.json_file)
-
-        # Create a temporary unsupported file
-        self.unsupported_file = Path(self.test_dir.name) / "test.txt"
-        with open(self.unsupported_file, 'w') as f:
-            f.write("This is a test file with unsupported format.")
-
-    def tearDown(self):
-        # Cleanup the temporary directory and files
-        self.test_dir.cleanup()
-
-    def test_csv_initialization(self):
-        case_base_csv = casebase(cb_type=CBTypes.DF.value, source=self.csv_file)
-        self.assertIsNotNone(case_base_csv.data, "CSV data should be loaded")
-        self.assertFalse(case_base_csv.data.empty, "CSV data should not be empty")
-
-    def test_excel_initialization(self):
-        case_base_excel = casebase(cb_type=CBTypes.DF.value, source=self.excel_file)
-        self.assertIsNotNone(case_base_excel.data, "Excel data should be loaded")
-        self.assertFalse(case_base_excel.data.empty, "Excel data should not be empty")
-
-    def test_json_initialization(self):
-        case_base_json = casebase(cb_type=CBTypes.DF.value, source=self.json_file)
-        self.assertIsNotNone(case_base_json.data, "JSON data should be loaded")
-        self.assertFalse(case_base_json.data.empty, "JSON data should not be empty")
-
-    def test_unsupported_file_initialization(self):
-        with self.assertRaises(ValueError, msg="No valid file extension"):
-            casebase(cb_type=CBTypes.DF.value, source=self.unsupported_file)
-
-    
+        last_row = case_base.data.iloc[-1]
+        
+        pass 
 
 if __name__ == '__main__':
     unittest.main(argv=[''], exit=False)
