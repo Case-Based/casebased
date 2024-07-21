@@ -124,11 +124,7 @@ class TestCaseBase(unittest.TestCase):
 
         last_row = case_base.data.iloc[-1]
 
-        print(case_base.data)
-
         case_base.remove_cases_with_missing_values()
-        
-        print(case_base.data)
 
         for column, expected_value in expected_values.items():
             self.assertEqual(last_row[column], expected_value)
@@ -159,8 +155,6 @@ class TestCaseBase(unittest.TestCase):
     def test_remove_duplicate_cases(self): 
 
         case_base = CaseBase(cb_type=CBTypes.DF.value, source=self.csv_file_path_duplicate)
-
-        case_base.remove_duplicate_cases() 
         
         expected_value = {
             "Fallnummer": 5, 
@@ -173,9 +167,15 @@ class TestCaseBase(unittest.TestCase):
             "Regen": 1
         }
 
-        last_row = case_base.data.iloc[-1]
+        print(case_base.data)
+        print("----------------") 
+        case_base.drop_duplicate_cases(["Fallnummer"])
+        print(case_base.data)
         
-        pass 
+        last_row = case_base.data.iloc[-1]
+
+        for column, expected_value in expected_value.items(): 
+            self.assertEqual(last_row[column], expected_value) 
 
 if __name__ == '__main__':
     unittest.main(argv=[''], exit=False)

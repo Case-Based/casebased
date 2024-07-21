@@ -99,8 +99,8 @@ class CaseBase:
 
         return self.data
 
-    def remove_duplicate_cases(self): 
-        # TODO How to deal with cases that are the same but the number of the case is different?
-        # return self.data.drop_duplicates(subset=None, keep='first', inplace=False)
-        pass 
+    def drop_duplicate_cases(self, dataToIgnore: list): 
+        columns = self.data.columns 
+        dataToConsider = [element for element in columns if element not in dataToIgnore]
+        self.data = self.data.drop_duplicates(subset=dataToConsider, keep='first', inplace=False, ignore_index=False)
 
