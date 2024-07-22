@@ -167,11 +167,8 @@ class TestCaseBase(unittest.TestCase):
             "Regen": 1
         }
 
-        print(case_base.data)
-        print("----------------") 
         case_base.drop_duplicate_cases(["Fallnummer"])
-        print(case_base.data)
-        
+
         last_row = case_base.data.iloc[-1]
 
         for column, expected_value in expected_value.items(): 

@@ -71,28 +71,41 @@ class CaseBase:
         
         df = df.drop(index)
         return df.reset_index(drop=True) 
-    
-    def update_case(self, case_index: int, updated_case : dict):
-        try: 
-            case_index =+ 1
-            # if case_index.empty or self.verfiy_case_structure(updated_case) == False:
-            #     raise ValueError(f"Case with Fallnummer {case_index} not found")
+        
+    def update_case(self, case_index: int, updated_case: dict):
+        try:
+            # Validate index range
+            if case_index < 0 or case_index >= len(self.data):
+                raise IndexError(f"Case with index {case_index} not found")
 
+            # Uncomment if this method exists and should verify the structure
+            # if not self.verify_case_structure(updated_case):
+            #     raise ValueError(f"Updated case structure is invalid")
+
+            # Update the case
             for key, value in updated_case.items():
                 if key in self.data.columns:
                     self.data.at[case_index, key] = value
                 else:
                     raise KeyError(f"Column {key} does not exist in the dataframe")
-                
-        except Exception as e:  
 
+            return True
+
+        except IndexError as e:
             print(f"Error updating case: {e}")
             return False
+        except KeyError as e:
+            print(f"Error updating case: {e}")
+            return False
+        except ValueError as e:
+            print(f"Error updating case: {e}")
+            return False
+        except Exception as e:
+            print(f"An unexpected error occurred while updating case: {e}")
+            return False
+
     
     def remove_cases_with_missing_values(self):
-        """
-        Remove cases (rows) with any missing values from the case base.
-        """
         for column in self.data.columns:
             if self.data is None:
                 self.data.dropna(inplace=True)
