@@ -1,7 +1,6 @@
 import os
 from pathlib import Path
 import pandas as pd
-from pandas._typing import FilePath
 
 # Short description: This class is the main class for the case base. It is responsible for storing the cases and managing them.
 # Data is being stored in a pandas dataframe. The class provides methods to add and remove cases from the case base.
@@ -13,11 +12,7 @@ from constants import CBTypes, Extensions
 # )
 
 class CaseBase:
-
-    def __init__(self, data=None, cb_type=None, source: FilePath = None):
-
-        # self.data contains the panada dataframes (hat stores the cases)
-
+    def __init__(self, data=None, cb_type=None, source=None):
         self.data = data
         self.cb_type = cb_type
         self.source: Path = source
