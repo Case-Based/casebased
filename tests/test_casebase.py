@@ -1,7 +1,5 @@
-# from src.casebased.components.knowledge_containers.case_base import casebase
-from casebased.components.knowledge_containers.case_base.casebase import CaseBase
-case_base = CaseBase()
-# import unittest
+import casebased.components.knowledge_containers.case_base.casebase as casebase
+case_base = casebase.CaseBase()
 import pytest 
 import pandas as pd
 from io import StringIO
@@ -32,14 +30,14 @@ class TestCaseBase:
             'Regen': [1, 0, 1, 0]
         }
         
-        case_base1 = CaseBase(cb_type=CBTypes.DF.value, source=self.csv_file_path_setup)
+        case_base1 = casebase.CaseBase(cb_type=CBTypes.DF.value, source=self.csv_file_path_setup)
         case_base2 = pd.DataFrame(data=data)        
 
         self.assertTrue(case_base2.equals(case_base1.data))
 
     def test_verify_case_structure(self):
 
-        case_base = CaseBase(cb_type=CBTypes.DF.value, source=self.csv_file_path_setup)
+        case_base = casebase.CaseBase(cb_type=CBTypes.DF.value, source=self.csv_file_path_setup)
 
         case1 = {
             'Fallnummer': 1,
@@ -69,7 +67,7 @@ class TestCaseBase:
 
     def test_get_index_case(self):
 
-        case_base = CaseBase(cb_type=CBTypes.DF.value, source=self.csv_file_path_setup)
+        case_base = casebase.CaseBase(cb_type=CBTypes.DF.value, source=self.csv_file_path_setup)
 
         value_to_find = 20.0
         positions = case_base.get_index_of_case(value_to_find)
@@ -77,7 +75,7 @@ class TestCaseBase:
 
     def test_add_case(self):
         
-        case_base = CaseBase(cb_type=CBTypes.DF.value, source=self.csv_file_path_setup)
+        case_base = casebase.CaseBase(cb_type=CBTypes.DF.value, source=self.csv_file_path_setup)
         new_case = {
             "Fallnummer": 5, 
             "Temperatur": 20.0, 
@@ -109,7 +107,7 @@ class TestCaseBase:
 
     def test_remove_case_with_missing_value(self): 
 
-        case_base = CaseBase(cb_type=CBTypes.DF.value, source=self.csv_file_path_setup)
+        case_base = casebase.CaseBase(cb_type=CBTypes.DF.value, source=self.csv_file_path_setup)
 
         expected_values = { 
             "Fallnummer": 4, 
@@ -131,7 +129,7 @@ class TestCaseBase:
 
     def test_update_case(self):
 
-        case_base = CaseBase(cb_type=CBTypes.DF.value, source=self.csv_file_path_setup)
+        case_base = casebase.CaseBase(cb_type=CBTypes.DF.value, source=self.csv_file_path_setup)
 
         case_base.update_case(1, {"Temperatur": 50.0})
 
@@ -154,7 +152,7 @@ class TestCaseBase:
 
     def test_remove_duplicate_cases(self): 
 
-        case_base = CaseBase(cb_type=CBTypes.DF.value, source=self.csv_file_path_duplicate)
+        case_base = casebase.CaseBase(cb_type=CBTypes.DF.value, source=self.csv_file_path_duplicate)
         
         expected_value = {
             "Fallnummer": 5, 
