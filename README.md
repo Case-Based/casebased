@@ -15,6 +15,11 @@
 
 CaseBased is a python library that implements the priciples of case-based reasoning.
 
+[📃 Our Paper on CBR](https://github.com/user-attachments/files/16977337/SA-I_IT22_KlockenhoffLukas-KloettschenJannekLiendlJonas.pdf)
+
+
+
+
 </div>
 
 ## Very first steps
