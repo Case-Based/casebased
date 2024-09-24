@@ -1,6 +1,6 @@
 import pytest
 
-from casebased.components.case.querycase import QueryCase
+from casebased.components.querycase import QueryCase
 
 feature_obj = {"A": 1, "B": 2, "C": 3}
 

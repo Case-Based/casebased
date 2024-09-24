@@ -1,18 +1,4 @@
-from typing import Optional
-
-import os
 from pathlib import Path
-
-import pandas as pd
-
-from casebased.components.knowledge_containers.case_base.constants import (
-    CBTypes,
-    Extensions,
-)
-from casebased.components.knowledge_containers.ontology.attribute import (
-    FeatureAttribute,
-)
-from casebased.components.knowledge_containers.ontology.vocabulary import Vocabulary
 
 
 class CaseBase:

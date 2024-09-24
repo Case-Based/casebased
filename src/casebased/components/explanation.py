@@ -2,8 +2,6 @@ from typing import List
 
 from datetime import datetime
 
-from casebased.components.case.querycase import QueryCase
-
 
 class Explanation:
     def __init__(self, content: str, adapted_from: List[int]):

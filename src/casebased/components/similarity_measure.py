@@ -3,9 +3,9 @@ from typing import AnyStr
 from sklearn.model_selection import GridSearchCV
 from sklearn.neighbors import KNeighborsClassifier, NearestNeighbors
 
-from ...case.querycase import QueryCase
-from ..case_base.casebase import CaseBase
-from ..ontology.vocabulary import Vocabulary
+from casebased.components.casebase import CaseBase
+from casebased.components.querycase import QueryCase
+from casebased.components.vocabulary import Vocabulary
 
 # TODO: Alter das wird komplizierter als ich dachte... Wie berechnet man die ähnlichkeit von 2 Wörtern??
 #  Wir müssen dann auch unbedigt einen weg finden, dass

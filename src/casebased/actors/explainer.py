@@ -6,13 +6,11 @@ will be presented to the user in a clear and concise manner, allowing them to un
 The explainer uses a local llm model to generate explanations. It uses the attributes of the case and the k-similar cases as input.
 """
 
-from typing import List, Tuple
+from typing import List
 
-import ollama
-
-from casebased.components.knowledge_containers.case_base.casebase import CaseBase
-from src.casebased.components.explanation.explanation import Explanation
-from src.casebased.components.knowledge_containers.ontology.vocabulary import Vocabulary
+from casebased.components.casebase import CaseBase
+from casebased.components.explanation import Explanation
+from casebased.components.vocabulary import Vocabulary
 
 
 class Explainer:

@@ -1,9 +1,7 @@
-from casebased.components.case.querycase import QueryCase
-from casebased.components.knowledge_containers.case_base.casebase import CaseBase
-from casebased.components.knowledge_containers.ontology.vocabulary import Vocabulary
-from casebased.components.knowledge_containers.similarity_measure.similarity_measure import (
-    SimilarityMeasure,
-)
+from casebased.components.casebase import CaseBase
+from casebased.components.querycase import QueryCase
+from casebased.components.similarity_measure import SimilarityMeasure
+from casebased.components.vocabulary import Vocabulary
 
 
 class Retriever:

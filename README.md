@@ -1,6 +1,4 @@
-# casebased
-
-<div align="center">
+<div align="left">
 
 [![Build status](https://github.com/Case-Based/casebased/workflows/build/badge.svg?branch=master&event=push)](https://github.com/Case-Based/casebased/actions?query=workflow%3Abuild)
 [![Python Version](https://img.shields.io/pypi/pyversions/casebased.svg)](https://pypi.org/project/casebased/)
@@ -13,344 +11,89 @@
 [![License](https://img.shields.io/github/license/casebased/casebased)](https://github.com/Case-Based/casebased/blob/master/LICENSE)
 ![Coverage Report](assets/images/coverage.svg)
 
-CaseBased is a python library that implements the priciples of case-based reasoning.
+---
 
-[📃 Our Paper on CBR](https://github.com/user-attachments/files/16977337/SA-I_IT22_KlockenhoffLukas-KloettschenJannekLiendlJonas.pdf)
+### [📃 Our Paper on CBR](https://github.com/user-attachments/files/16977337/SA-I_IT22_KlockenhoffLukas-KloettschenJannekLiendlJonas.pdf)
 
+---
 
+# Casebased - A Python Library for Case-Based Reasoning
 
+[![PyPI Version](https://img.shields.io/pypi/v/casebased.svg)](https://pypi.org/project/casebased/)
+[![Python Versions](https://img.shields.io/pypi/pyversions/casebased.svg)](https://pypi.org/project/casebased/)
+[![License](https://img.shields.io/pypi/l/casebased.svg)](https://github.com/your-username/casebased/blob/main/LICENSE)
 
-</div>
+**Casebased** is a Python library that provides a flexible and extensible framework for implementing case-based reasoning (CBR) systems. CBR is a problem-solving paradigm that focuses on solving new problems by adapting solutions that were used to solve similar past problems.
 
-## Very first steps
+## Features
 
-### Initialize your code
-
-1. Initialize `git` inside your repo:
-
-```bash
-cd casebased && git init
-```
-
-2. If you don't have `Poetry` installed run:
-
-```bash
-make poetry-download
-```
-
-3. Initialize poetry and install `pre-commit` hooks:
-
-```bash
-make install
-make pre-commit-install
-```
-
-4. Run the codestyle:
-
-```bash
-make codestyle
-```
-
-5. Upload initial code to GitHub:
-
-```bash
-git add .
-git commit -m ":tada: Initial commit"
-git branch -M main
-git remote add origin https://github.com/casebased/casebased.git
-git push -u origin main
-```
-
-### Set up bots
-
-- Set up [Dependabot](https://docs.github.com/en/github/administering-a-repository/enabling-and-disabling-version-updates#enabling-github-dependabot-version-updates) to ensure you have the latest dependencies.
-- Set up [Stale bot](https://github.com/apps/stale) for automatic issue closing.
-
-### Poetry
-
-Want to know more about Poetry? Check [its documentation](https://python-poetry.org/docs/).
-
-<details>
-<summary>Details about Poetry</summary>
-<p>
-
-Poetry's [commands](https://python-poetry.org/docs/cli/#commands) are very intuitive and easy to learn, like:
-
-- `poetry add numpy@latest`
-- `poetry run pytest`
-- `poetry publish --build`
-
-etc
-</p>
-</details>
-
-### Building and releasing your package
-
-Building a new version of the application contains steps:
-
-- Bump the version of your package `poetry version <version>`. You can pass the new version explicitly, or a rule such as `major`, `minor`, or `patch`. For more details, refer to the [Semantic Versions](https://semver.org/) standard.
-- Make a commit to `GitHub`.
-- Create a `GitHub release`.
-- And... publish 🙂 `poetry publish --build`
-
-## 🎯 What's next
-
-Well, that's up to you 💪🏻. I can only recommend the packages and articles that helped me.
-
-- [`Typer`](https://github.com/tiangolo/typer) is great for creating CLI applications.
-- [`Rich`](https://github.com/willmcgugan/rich) makes it easy to add beautiful formatting in the terminal.
-- [`Pydantic`](https://github.com/samuelcolvin/pydantic/) – data validation and settings management using Python type hinting.
-- [`Loguru`](https://github.com/Delgan/loguru) makes logging (stupidly) simple.
-- [`tqdm`](https://github.com/tqdm/tqdm) – fast, extensible progress bar for Python and CLI.
-- [`IceCream`](https://github.com/gruns/icecream) is a little library for sweet and creamy debugging.
-- [`orjson`](https://github.com/ijl/orjson) – ultra fast JSON parsing library.
-- [`Returns`](https://github.com/dry-python/returns) makes you function's output meaningful, typed, and safe!
-- [`Hydra`](https://github.com/facebookresearch/hydra) is a framework for elegantly configuring complex applications.
-- [`FastAPI`](https://github.com/tiangolo/fastapi) is a type-driven asynchronous web framework.
-
-Articles:
-
-- [Open Source Guides](https://opensource.guide/).
-- [A handy guide to financial support for open source](https://github.com/nayafia/lemonade-stand)
-- [GitHub Actions Documentation](https://help.github.com/en/actions).
-- Maybe you would like to add [gitmoji](https://gitmoji.carloscuesta.me/) to commit names. This is really funny. 😄
-
-## 🚀 Features
-
-### Development features
-
-- Supports for `Python 3.9` and higher.
-- [`Poetry`](https://python-poetry.org/) as the dependencies manager. See configuration in [`pyproject.toml`](https://github.com/casebased/casebased/blob/master/pyproject.toml) and [`setup.cfg`](https://github.com/casebased/casebased/blob/master/setup.cfg).
-- Automatic codestyle with [`black`](https://github.com/psf/black), [`isort`](https://github.com/timothycrosley/isort) and [`pyupgrade`](https://github.com/asottile/pyupgrade).
-- Ready-to-use [`pre-commit`](https://pre-commit.com/) hooks with code-formatting.
-- Type checks with [`mypy`](https://mypy.readthedocs.io); docstring checks with [`darglint`](https://github.com/terrencepreilly/darglint); security checks with [`safety`](https://github.com/pyupio/safety) and [`bandit`](https://github.com/PyCQA/bandit)
-- Testing with [`pytest`](https://docs.pytest.org/en/latest/).
-- Ready-to-use [`.editorconfig`](https://github.com/casebased/casebased/blob/master/.editorconfig), [`.dockerignore`](https://github.com/casebased/casebased/blob/master/.dockerignore), and [`.gitignore`](https://github.com/casebased/casebased/blob/master/.gitignore). You don't have to worry about those things.
-
-### Deployment features
-
-- `GitHub` integration: issue and pr templates.
-- `Github Actions` with predefined [build workflow](https://github.com/casebased/casebased/blob/master/.github/workflows/build.yml) as the default CI/CD.
-- Everything is already set up for security checks, codestyle checks, code formatting, testing, linting, docker builds, etc with [`Makefile`](https://github.com/casebased/casebased/blob/master/Makefile#L89). More details in [makefile-usage](#makefile-usage).
-- [Dockerfile](https://github.com/casebased/casebased/blob/master/docker/Dockerfile) for your package.
-- Always up-to-date dependencies with [`@dependabot`](https://dependabot.com/). You will only [enable it](https://docs.github.com/en/github/administering-a-repository/enabling-and-disabling-version-updates#enabling-github-dependabot-version-updates).
-- Automatic drafts of new releases with [`Release Drafter`](https://github.com/marketplace/actions/release-drafter). You may see the list of labels in [`release-drafter.yml`](https://github.com/casebased/casebased/blob/master/.github/release-drafter.yml). Works perfectly with [Semantic Versions](https://semver.org/) specification.
-
-### Open source community features
-
-- Ready-to-use [Pull Requests templates](https://github.com/casebased/casebased/blob/master/.github/PULL_REQUEST_TEMPLATE.md) and several [Issue templates](https://github.com/casebased/casebased/tree/master/.github/ISSUE_TEMPLATE).
-- Files such as: `LICENSE`, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, and `SECURITY.md` are generated automatically.
-- [`Stale bot`](https://github.com/apps/stale) that closes abandoned issues after a period of inactivity. (You will only [need to setup free plan](https://github.com/marketplace/stale)). Configuration is [here](https://github.com/casebased/casebased/blob/master/.github/.stale.yml).
-- [Semantic Versions](https://semver.org/) specification with [`Release Drafter`](https://github.com/marketplace/actions/release-drafter).
+| Feature                | Description                                                                |
+| ---------------------- | -------------------------------------------------------------------------- |
+| Case Representation    | Represent cases using a variety of data structures, including dictionaries, JSON, and custom classes. |
+| Case Retrieval         | Implement different case retrieval algorithms, such as nearest neighbor, fuzzy matching, and knowledge-guided search. |
+| Case Adaptation        | Provide functions to adapt retrieved cases to fit the current problem. |
+| Case Evaluation        | Assess the quality of the adapted solution and provide feedback to the system. |
+| Case Learning          | Automatically learn from successful and unsuccessful problem-solving experiences to improve future performance. |
+| Extensibility          | Easily integrate the library with your own domain-specific data and algorithms. |
 
 ## Installation
 
-```bash
-pip install -U casebased
+You can install the `casebased` library using pip:
+
+```
+pip install casebased
 ```
 
-or install with `Poetry`
+## Usage
 
-```bash
-poetry add casebased
+Here's a simple example of how to use the `casebased` library:
+
+<antArtifact identifier="casebased-example" type="application/vnd.ant.code" language="python" title="Casebased Library Example">
+from casebased.case_base import CaseBase
+from casebased.retrieval import NearestNeighborRetriever
+
+# Create a case base
+case_base = CaseBase()
+
+# Add cases to the case base
+```python
+case_base.add_case({
+"problem": {
+"symptoms": ["fever", "headache", "sore throat"],
+"duration": 3
+},
+"solution": {
+"medication": "paracetamol",
+"dosage": "500mg every 6 hours"
+}
+})
 ```
 
-
-
-### Makefile usage
-
-[`Makefile`](https://github.com/casebased/casebased/blob/master/Makefile) contains a lot of functions for faster development.
-
-<details>
-<summary>1. Download and remove Poetry</summary>
-<p>
-
-To download and install Poetry run:
-
-```bash
-make poetry-download
+```python
+case_base.add_case({
+"problem": {
+"symptoms": ["cough", "runny nose", "fatigue"],
+"duration": 5
+},
+"solution": {
+"medication": "ibuprofen",
+"dosage": "400mg every 8 hours"
+}
+})
 ```
+# Retrieve the most similar case
+```python
+new_problem = {
+"symptoms": ["fever", "headache", "sore throat"],
+"duration": 2
+}
 
-To uninstall
+retriever = NearestNeighborRetriever()
+similar_case = retriever.retrieve(case_base, new_problem)
 
-```bash
-make poetry-remove
+print(f"Similar case: {similar_case}")
+print(f"Suggested solution: {similar_case['solution']}")
 ```
-
-</p>
-</details>
-
-<details>
-<summary>2. Install all dependencies and pre-commit hooks</summary>
-<p>
-
-Install requirements:
-
-```bash
-make install
-```
-
-Pre-commit hooks coulb be installed after `git init` via
-
-```bash
-make pre-commit-install
-```
-
-</p>
-</details>
-
-<details>
-<summary>3. Codestyle</summary>
-<p>
-
-Automatic formatting uses `pyupgrade`, `isort` and `black`.
-
-```bash
-make codestyle
-
-# or use synonym
-make formatting
-```
-
-Codestyle checks only, without rewriting files:
-
-```bash
-make check-codestyle
-```
-
-> Note: `check-codestyle` uses `isort`, `black` and `darglint` library
-
-Update all dev libraries to the latest version using one comand
-
-```bash
-make update-dev-deps
-```
-
-<details>
-<summary>4. Code security</summary>
-<p>
-
-```bash
-make check-safety
-```
-
-This command launches `Poetry` integrity checks as well as identifies security issues with `Safety` and `Bandit`.
-
-```bash
-make check-safety
-```
-
-</p>
-</details>
-
-</p>
-</details>
-
-<details>
-<summary>5. Type checks</summary>
-<p>
-
-Run `mypy` static type checker
-
-```bash
-make mypy
-```
-
-</p>
-</details>
-
-<details>
-<summary>6. Tests with coverage badges</summary>
-<p>
-
-Run `pytest`
-
-```bash
-make test
-```
-
-</p>
-</details>
-
-<details>
-<summary>7. All linters</summary>
-<p>
-
-Of course there is a command to ~~rule~~ run all linters in one:
-
-```bash
-make lint
-```
-
-the same as:
-
-```bash
-make test && make check-codestyle && make mypy && make check-safety
-```
-
-</p>
-</details>
-
-<details>
-<summary>8. Docker</summary>
-<p>
-
-```bash
-make docker-build
-```
-
-which is equivalent to:
-
-```bash
-make docker-build VERSION=latest
-```
-
-Remove docker image with
-
-```bash
-make docker-remove
-```
-
-More information [about docker](https://github.com/casebased/casebased/tree/master/docker).
-
-</p>
-</details>
-
-<details>
-<summary>9. Cleanup</summary>
-<p>
-Delete pycache files
-
-```bash
-make pycache-remove
-```
-
-Remove package build
-
-```bash
-make build-remove
-```
-
-Delete .DS_STORE files
-
-```bash
-make dsstore-remove
-```
-
-Remove .mypycache
-
-```bash
-make mypycache-remove
-```
-
-Or to remove all above run:
-
-```bash
-make cleanup
-```
-
-</p>
-</details>
 
 ## 📈 Releases
 

@@ -1,15 +1,12 @@
-import time
-
 import pandas as pd
 
-from casebased.actors.adapter.adapter import Adapter
-from casebased.actors.retriever.retriever import Retriever
-from casebased.components.knowledge_containers.case_base.casebase import CaseBase
-from casebased.components.knowledge_containers.case_base.constants import CBTypes
-from casebased.components.knowledge_containers.ontology.vocabulary import Vocabulary
-from casebased.components.knowledge_containers.similarity_measure.similarity_measure import (
-    SimilarityMeasure,
-)
+from casebased.actors.adapter import Adapter
+from casebased.actors.retriever import Retriever
+from casebased.components.attribute import FeatureAttribute
+from casebased.components.casebase import CaseBase
+from casebased.components.constants import CBTypes
+from casebased.components.similarity_measure import SimilarityMeasure
+from casebased.components.vocabulary import Vocabulary
 
 if __name__ == "__main__":
     new_case_idx = 0
@@ -50,3 +47,34 @@ if __name__ == "__main__":
     adapter = Adapter(case_base, vocab)
     solution = adapter.adapt(case, kSimilarCases)
     print(solution)
+
+    ### FLOW BASED DEVELOPMENT
+
+    # Import Data
+    data = pd.read_csv("../test_data/diabetes.csv")
+    # Create CaseBase
+    case_base = CaseBase(data)
+    # Create Vocabulary
+    feature_labels = [c for c in data.columns if c not in ["Outcome"]]
+    target_labels = ["Outcome"]
+
+    features = [FeatureAttribute.from_name_string(f) for f in feature_labels]
+    targets = [FeatureAttribute.from_name_string(t) for t in target_labels]
+
+    vocab = Vocabulary(features, targets, weights)
+    # Learn Weights
+    vocab.compile_weights(case_base, method="korr")
+
+    # Learn Adaptation Rules
+
+    # Accept New Case
+
+    # Retrieve Similar Cases
+
+    # Adapt Solution
+
+    # Explain Solution
+
+    # Return Solution
+
+    # Store Case

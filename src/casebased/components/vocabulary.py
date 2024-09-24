@@ -1,10 +1,7 @@
 from typing import List, Union
 
-from casebased.components.knowledge_containers.case_base.casebase import CaseBase
-from casebased.components.knowledge_containers.ontology.attribute import (
-    FeatureAttribute,
-    TargetAttribute,
-)
+from casebased.components.attribute import FeatureAttribute, TargetAttribute
+from casebased.components.casebase import CaseBase
 
 
 class Vocabulary:

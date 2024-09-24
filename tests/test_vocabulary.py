@@ -1,10 +1,7 @@
 import pytest
 
-from casebased.components.knowledge_containers.ontology.attribute import (
-    FeatureAttribute,
-    TargetAttribute,
-)
-from src.casebased.components.knowledge_containers.ontology.vocabulary import Vocabulary
+from casebased.components.attribute import FeatureAttribute, TargetAttribute
+from casebased.components.vocabulary import Vocabulary
 
 
 class TestVocabulary:
