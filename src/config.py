@@ -2,8 +2,8 @@ from typing import Callable, Optional, Union
 
 from dataclasses import dataclass
 
-from components.similarity_measure.types import SimilarityMeasureAlgorithm
-from utils.k_algorithm import KAlgorithm
+from .components.similarity_measure.types import SimilarityMeasureAlgorithm
+from .utils.k_algorithm import KAlgorithm
 
 
 @dataclass
