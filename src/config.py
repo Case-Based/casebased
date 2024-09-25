@@ -1,5 +1,7 @@
+from typing import Callable, Optional, Union
+
 from dataclasses import dataclass
-from typing import Union, Callable, Optional
+
 from components.similarity_measure.types import SimilarityMeasureAlgorithm
 from utils.k_algorithm import KAlgorithm
 
@@ -24,7 +26,9 @@ class Configuration:
             However, unless you are not using an algorithm to find the optimal k yourself, we discourage people to manually type in the k, because the solution may be bad.
     """
 
-    similarity_measure_algorithm: Union[None, SimilarityMeasureAlgorithm, Callable[[list, list], int]] = None
+    similarity_measure_algorithm: Union[
+        None, SimilarityMeasureAlgorithm, Callable[[list, list], int]
+    ] = None
     """
     This attribute determines which algorithm will be used to calculate the distance between cases, which is a key point in CBR.
     You can choose from a list of built-in algorithms or write your own algorithm and provide the function here.

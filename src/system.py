@@ -1,14 +1,16 @@
 from typing import Optional
-from config import Configuration
-from components.similarity_measure.similarity import SimilarityMeasure
+
 from components.casebase.casebase import CaseBase
+from components.similarity_measure.similarity import SimilarityMeasure
 from components.vocabulary.vocabulary import Vocabulary
+from config import Configuration
 
 
 class CaseBaseSystem:
     """
     Using this CaseBaseSystem class you can manage the entire CBR cycle and decide how you operate the case-base system.
     """
+
     configuration: Optional[Configuration]
     """
     With the configuration you can change the behavior of the case-base system.

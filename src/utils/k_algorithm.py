@@ -2,4 +2,4 @@ from enum import Enum
 
 
 class KAlgorithm(Enum):
-    ELBOW = 0,
+    ELBOW = (0,)

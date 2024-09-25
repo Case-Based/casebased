@@ -1,6 +1,8 @@
-from typing import Optional, Union, Callable, Any
-from .types import SimilarityMeasureAlgorithm
+from typing import Any, Callable, Optional, Union
+
 from utils.k_algorithm import KAlgorithm
+
+from .types import SimilarityMeasureAlgorithm
 
 
 class SimilarityMeasure:
@@ -9,10 +11,12 @@ class SimilarityMeasure:
     similarity_measure: Union[SimilarityMeasureAlgorithm, Callable[[list, list], int]]
 
     def __init__(
-            self,
-            k=None,
-            k_finding: Union[KAlgorithm, Callable[[Any], int]] = KAlgorithm.ELBOW,
-            similarity_measure: Union[SimilarityMeasureAlgorithm, Callable[[list, list], int]] = SimilarityMeasureAlgorithm.EUCLIDEAN
+        self,
+        k=None,
+        k_finding: Union[KAlgorithm, Callable[[Any], int]] = KAlgorithm.ELBOW,
+        similarity_measure: Union[
+            SimilarityMeasureAlgorithm, Callable[[list, list], int]
+        ] = SimilarityMeasureAlgorithm.EUCLIDEAN,
     ):
         self.k = k
         self.k_finding = k_finding
