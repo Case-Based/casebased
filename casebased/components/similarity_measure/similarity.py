@@ -1,6 +1,6 @@
 from typing import Any, Callable, Optional, Union
 
-from utils.k_algorithm import KAlgorithm
+from casebased.utils.k_algorithm import KAlgorithm
 
 from .types import SimilarityMeasureAlgorithm
 

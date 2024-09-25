@@ -1,5 +1,5 @@
-from src.config import Configuration
-from src.system import CaseBaseSystem
+from casebased.config import Configuration
+from casebased.system import CaseBaseSystem
 
 
 def test__system_init():
