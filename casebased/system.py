@@ -1,9 +1,9 @@
 from typing import Optional
 
-from components.casebase.casebase import CaseBase
-from components.similarity_measure.similarity import SimilarityMeasure
-from components.vocabulary.vocabulary import Vocabulary
-from config import Configuration
+from .components.casebase.casebase import CaseBase
+from .components.similarity_measure.similarity import SimilarityMeasure
+from .components.vocabulary.vocabulary import Vocabulary
+from .config import Configuration
 
 
 class CaseBaseSystem:
