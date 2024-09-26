@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import pandas as pd
+
 
 class CaseBase:
     """
@@ -9,7 +11,7 @@ class CaseBase:
     This case based can then be stored in a file and used for case based reasoning.
     """
 
-    def __init__(self, df=None, path=None):
+    def __init__(self, df=pd.DataFrame(), path=None):
         self.df = df.copy()
         self.path: Path = path
         # add utility column and set it to 0 for all cases

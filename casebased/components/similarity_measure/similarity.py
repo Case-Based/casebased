@@ -1,19 +1,21 @@
-from typing import AnyStr
+from typing import Any, AnyStr, Callable, Optional, Union
 
 from sklearn.model_selection import GridSearchCV
 from sklearn.neighbors import KNeighborsClassifier, NearestNeighbors
 
-from casebased.components.casebase import CaseBase
-from casebased.components.querycase import QueryCase
-from casebased.components.vocabulary import Vocabulary
+from casebased.components.casebase.casebase import CaseBase
+from casebased.components.casebase.query_case import QueryCase
+from casebased.components.vocabulary.vocabulary import Vocabulary
+from casebased.utils.k_algorithm import KAlgorithm
 
-# TODO: Alter das wird komplizierter als ich dachte... Wie berechnet man die ähnlichkeit von 2 Wörtern??
-#  Wir müssen dann auch unbedigt einen weg finden, dass
-#  Nutzer typisieren müssen im vocabulary (Word, Sentence, Text, Number, ...)
-#  Auch noch wichtig dass wir hier noch weights berücksichtigen
+from .types import SimilarityMeasureAlgorithm
 
 
 class SimilarityMeasure:
+    k: Optional[int]
+    k_finding: Union[KAlgorithm, Callable[[Any], int]]
+    similarity_measure: Union[SimilarityMeasureAlgorithm, Callable[[list, list], int]]
+
     def __init__(self, case_base: CaseBase, vocabulary: Vocabulary):
         self.case_base = case_base
         self.vocabulary = vocabulary

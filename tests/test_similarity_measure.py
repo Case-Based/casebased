@@ -2,11 +2,11 @@
 import os
 from pathlib import Path
 
-from casebased.components.attribute import FeatureAttribute, TargetAttribute
-from casebased.components.casebase import CaseBase
-from casebased.components.querycase import QueryCase
-from casebased.components.similarity_measure import SimilarityMeasure
-from casebased.components.vocabulary import Vocabulary
+from casebased.components.casebase.casebase import CaseBase
+from casebased.components.casebase.query_case import QueryCase
+from casebased.components.similarity_measure.similarity import SimilarityMeasure
+from casebased.components.vocabulary.attribute import FeatureAttribute, TargetAttribute
+from casebased.components.vocabulary.vocabulary import Vocabulary
 
 if "tests" in os.getcwd():
     source = Path("../test_data/regen.csv")
@@ -15,7 +15,7 @@ else:
 
 
 class TestSimilarityMeasure:
-    case_base = CaseBase(None, "df", source)
+    case_base = CaseBase(path=source)
     temp_attr = FeatureAttribute("Temperatur", (int, float), -50, 50)
     hum_attr = FeatureAttribute("Luftfeuchtigkeit", (int, float), 0, 100)
     press_attr = FeatureAttribute("Luftdruck", (int, float), 900, 1100)

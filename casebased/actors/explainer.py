@@ -8,9 +8,9 @@ The explainer uses a local llm model to generate explanations. It uses the attri
 
 from typing import List
 
-from casebased.components.casebase import CaseBase
-from casebased.components.explanation import Explanation
-from casebased.components.vocabulary import Vocabulary
+from casebased.components.casebase.casebase import CaseBase
+from casebased.components.explainer.explanation import Explanation
+from casebased.components.vocabulary.vocabulary import Vocabulary
 
 
 class Explainer:

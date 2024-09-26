@@ -1,7 +1,7 @@
 import pytest
 
-from casebased.components.attribute import FeatureAttribute, TargetAttribute
-from casebased.components.vocabulary import Vocabulary
+from casebased.components.vocabulary.attribute import FeatureAttribute, TargetAttribute
+from casebased.components.vocabulary.vocabulary import Vocabulary
 
 
 class TestVocabulary:

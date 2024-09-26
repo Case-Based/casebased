@@ -1,7 +1,8 @@
 from typing import List, Union
 
-from casebased.components.attribute import FeatureAttribute, TargetAttribute
-from casebased.components.casebase import CaseBase
+from casebased.components.casebase.casebase import CaseBase
+
+from .attribute import FeatureAttribute, TargetAttribute
 
 
 class Vocabulary:
