@@ -33,8 +33,6 @@ class SimilarityMeasure:
 
     def _fit_classifier(self, case_base: CaseBase, vocabulary: Vocabulary, **kwargs):
         k = kwargs.get("k") or self.k
-        if k is None:
-            k = "auto"
         algorithm = kwargs.get("algorithm")
         weights = kwargs.get("weights")
         query = kwargs.get("query")
