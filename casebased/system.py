@@ -29,14 +29,11 @@ class CaseBaseSystem:
                 Provide the configuration that will define which algorithms to use.
         """
         self.configuration = configuration
+        default_config = Configuration()  # TODO: Create default configuration behavior
         if self.configuration is None:
-            self.similarity_measure = SimilarityMeasure()
+            self.similarity_measure = SimilarityMeasure(default_config)
         else:
-            self.similarity_measure = SimilarityMeasure(
-                k=self.configuration.k,
-                similarity_measure=self.configuration.similarity_measure_algorithm,
-                k_finding=self.configuration.k_algorithm,
-            )
+            self.similarity_measure = SimilarityMeasure(configuration)
         self.case_base = CaseBase()
         self.vocabulary = Vocabulary()
 
@@ -62,8 +59,4 @@ class CaseBaseSystem:
         if self.configuration is None:
             self.similarity_measure = SimilarityMeasure()
         else:
-            self.similarity_measure = SimilarityMeasure(
-                k_finding=self.configuration.k_algorithm,
-                k=self.configuration.k,
-                similarity_measure=self.configuration.similarity_measure_algorithm,
-            )
+            self.similarity_measure = SimilarityMeasure(self.configuration)

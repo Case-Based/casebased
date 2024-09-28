@@ -146,7 +146,7 @@ class TargetAttribute(Attribute):
     def __init__(
         self,
         name: str,
-        data_type: tuple[Type[Any]],
+        data_type: [Type[Any]],
         min_value: Union[float, int] = -np.inf,
         max_value: Union[float, int] = np.inf,
         exclusive_min: bool = False,
@@ -162,7 +162,7 @@ class FeatureAttribute(Attribute):
     def __init__(
         self,
         name: str,
-        data_type: tuple[Type[Any]],
+        data_type: [Type[Any]],
         min_value: Union[float, int] = -np.inf,
         max_value: Union[float, int] = np.inf,
         weight: float = 1.0,

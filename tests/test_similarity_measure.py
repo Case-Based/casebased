@@ -2,11 +2,14 @@
 import os
 from pathlib import Path
 
+import pandas as pd
+
 from casebased.components.casebase.casebase import CaseBase
 from casebased.components.casebase.query_case import QueryCase
 from casebased.components.similarity_measure.similarity import SimilarityMeasure
 from casebased.components.vocabulary.attribute import FeatureAttribute, TargetAttribute
 from casebased.components.vocabulary.vocabulary import Vocabulary
+from casebased.config import Configuration
 
 if "tests" in os.getcwd():
     source = Path("../test_data/regen.csv")
@@ -15,7 +18,8 @@ else:
 
 
 class TestSimilarityMeasure:
-    case_base = CaseBase(path=source)
+    cases = pd.read_csv(source)
+    case_base = CaseBase(cases=cases)
     temp_attr = FeatureAttribute("Temperatur", (int, float), -50, 50)
     hum_attr = FeatureAttribute("Luftfeuchtigkeit", (int, float), 0, 100)
     press_attr = FeatureAttribute("Luftdruck", (int, float), 900, 1100)
@@ -30,7 +34,8 @@ class TestSimilarityMeasure:
     vocabulary = Vocabulary(features, targets)
 
     def test_get_k_similar_cases(self):
-        similarity_measure = SimilarityMeasure(self.case_base, self.vocabulary)
+        config = Configuration()
+        similarity_measure = SimilarityMeasure(config)
         features = {
             "Temperatur": 18.5,
             "Luftfeuchtigkeit": 95,
@@ -40,6 +45,9 @@ class TestSimilarityMeasure:
             "Breitengrad": 51.5134,
         }
         query = QueryCase(features)
+        print(self.case_base.cases.columns)
         k = 2
-        indices = similarity_measure.get_k_similar_cases(query, k)
+        indices = similarity_measure.get_k_similar_cases(
+            query, k, self.case_base, self.vocabulary
+        )
         assert (indices == [[2, 0]]).all()
