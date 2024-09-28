@@ -18,8 +18,6 @@ class SimilarityMeasure:
     similarity_measure: Union[SimilarityMeasureAlgorithm, Callable[[list, list], int]]
 
     def __init__(self, config: Configuration):
-        # self.case_base = case_base
-        # self.vocabulary = vocabulary
         self.k = config.k
         self.k_optimizer = config.k_optimizer
         self.similarity_measure = config.similarity_measure_algorithm
