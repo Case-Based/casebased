@@ -26,9 +26,9 @@ class SimilarityMeasure:
     ):
         # self.case_base = case_base
         # self.vocabulary = vocabulary
-        k = k
-        k_optimizer = k_optimizer
-        similarity_measure = similarity_measure
+        self.k = k
+        self.k_optimizer = k_optimizer
+        self.similarity_measure = similarity_measure
 
         self.classifier = None
         self.Regressor = None
