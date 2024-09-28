@@ -1,22 +1,35 @@
-from typing import AnyStr
+from typing import Any, AnyStr, Callable, Optional, Union
 
 from sklearn.model_selection import GridSearchCV
 from sklearn.neighbors import KNeighborsClassifier, NearestNeighbors
 
-from casebased.components.casebase import CaseBase
-from casebased.components.querycase import QueryCase
-from casebased.components.vocabulary import Vocabulary
+from casebased.components.casebase.casebase import CaseBase
+from casebased.components.casebase.query_case import QueryCase
+from casebased.components.vocabulary.vocabulary import Vocabulary
+from casebased.utils.k_algorithm import KAlgorithm
 
-# TODO: Alter das wird komplizierter als ich dachte... Wie berechnet man die ähnlichkeit von 2 Wörtern??
-#  Wir müssen dann auch unbedigt einen weg finden, dass
-#  Nutzer typisieren müssen im vocabulary (Word, Sentence, Text, Number, ...)
-#  Auch noch wichtig dass wir hier noch weights berücksichtigen
+from .types import SimilarityMeasureAlgorithm
 
 
 class SimilarityMeasure:
-    def __init__(self, case_base: CaseBase, vocabulary: Vocabulary):
-        self.case_base = case_base
-        self.vocabulary = vocabulary
+    k: Optional[int]
+    k_optimizer: Union[KAlgorithm, Callable[[Any], int]]
+    similarity_measure: Union[SimilarityMeasureAlgorithm, Callable[[list, list], int]]
+
+    def __init__(
+        self,
+        k: Optional[int] = None,
+        k_optimizer: Optional[KAlgorithm] = None,
+        similarity_measure: Optional[
+            Union[SimilarityMeasureAlgorithm, Callable[[list, list], int]]
+        ] = None,
+    ):
+        # self.case_base = case_base
+        # self.vocabulary = vocabulary
+        k = k
+        k_optimizer = k_optimizer
+        similarity_measure = similarity_measure
+
         self.classifier = None
         self.Regressor = None
 
@@ -26,14 +39,16 @@ class SimilarityMeasure:
                 self._fit_classifier(**kwargs)
         self._fit_classifier(**kwargs)
 
-    def _fit_classifier(self, **kwargs):
-        k = kwargs.get("k")
+    def _fit_classifier(self, case_base: CaseBase, vocabulary: Vocabulary, **kwargs):
+        k = kwargs.get("k") if kwargs.get("k") else self.k
+        if k is None:
+            k = "auto"
         algorithm = kwargs.get("algorithm")
         weights = kwargs.get("weights")
         query = kwargs.get("query")
 
-        x = self.case_base.data[self.vocabulary.feature_names].values
-        y = self.case_base.data[self.vocabulary.targets].values.reshape(-1)
+        x = case_base.cases[vocabulary.feature_names].values
+        y = case_base.cases[vocabulary.targets].values.reshape(-1)
 
         if k == "auto" or k is None or k == 0 or weights == "auto" or weights is None:
             param_grid = {
@@ -60,6 +75,8 @@ class SimilarityMeasure:
         self,
         query: QueryCase,
         k,
+        case_base: CaseBase,
+        vocabulary: Vocabulary,
         return_distance=False,
         algorithm="auto",
         weighted=False,
@@ -68,16 +85,16 @@ class SimilarityMeasure:
         Get the k most similar cases to a given case
         """
         try:
-            x = self.case_base.data[self.vocabulary.feature_names].values
+            x = case_base.cases[vocabulary.feature_names].values
         except KeyError:
-            x = self.case_base.data[self.vocabulary.feature_names].values
+            x = case_base.cases[vocabulary.feature_names].values
 
         if weighted:
             neighbors = NearestNeighbors(
                 n_neighbors=k,
                 algorithm=algorithm,
                 metric="minkowski",
-                metric_params={"w": self.vocabulary.weights},
+                metric_params={"w": vocabulary.weights},
             ).fit(x)
         else:
             neighbors = NearestNeighbors(n_neighbors=k, algorithm=algorithm).fit(x)

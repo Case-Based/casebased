@@ -1,7 +1,7 @@
 import pytest
 
-from casebased.components.attribute import FeatureAttribute, TargetAttribute
-from casebased.components.vocabulary import Vocabulary
+from casebased.components.vocabulary.attribute import FeatureAttribute, TargetAttribute
+from casebased.components.vocabulary.vocabulary import Vocabulary
 
 
 class TestVocabulary:
@@ -12,7 +12,7 @@ class TestVocabulary:
         FeatureAttribute("temperature", (int, float), -50, 50),
     ]
     targets = [
-        TargetAttribute("rain", (bool), False, True),
+        TargetAttribute("rain", bool, False, True),
     ]
     feature = FeatureAttribute("pressure", (int, float), 900, 1100)
 
