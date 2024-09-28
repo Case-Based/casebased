@@ -6,6 +6,7 @@ from sklearn.neighbors import KNeighborsClassifier, NearestNeighbors
 from casebased.components.casebase.casebase import CaseBase
 from casebased.components.casebase.query_case import QueryCase
 from casebased.components.vocabulary.vocabulary import Vocabulary
+from casebased.config import Configuration
 from casebased.utils.k_algorithm import KAlgorithm
 
 from .types import SimilarityMeasureAlgorithm
@@ -16,19 +17,12 @@ class SimilarityMeasure:
     k_optimizer: Union[KAlgorithm, Callable[[Any], int]]
     similarity_measure: Union[SimilarityMeasureAlgorithm, Callable[[list, list], int]]
 
-    def __init__(
-        self,
-        k: Optional[int] = None,
-        k_optimizer: Optional[KAlgorithm] = None,
-        similarity_measure: Optional[
-            Union[SimilarityMeasureAlgorithm, Callable[[list, list], int]]
-        ] = None,
-    ):
+    def __init__(self, config: Configuration):
         # self.case_base = case_base
         # self.vocabulary = vocabulary
-        self.k = k
-        self.k_optimizer = k_optimizer
-        self.similarity_measure = similarity_measure
+        self.k = config.k
+        self.k_optimizer = config.k_optimizer
+        self.similarity_measure = config.similarity_measure_algorithm
 
         self.classifier = None
         self.Regressor = None
