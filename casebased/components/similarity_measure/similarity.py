@@ -18,7 +18,7 @@ class SimilarityMeasure:
     similarity_measure: Union[SimilarityMeasureAlgorithm, Callable[[list, list], int]]
 
     def __init__(self, config: Configuration):
-        self.k = config.k
+        self.k = config.k or "auto"
         self.k_optimizer = config.k_optimizer
         self.similarity_measure = config.similarity_measure_algorithm
 
