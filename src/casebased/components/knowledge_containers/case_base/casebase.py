@@ -11,15 +11,20 @@ from constants import CBTypes, Extensions
 #     Extensions,
 # )
 
+
 class CaseBase:
+
     def __init__(self, data=None, cb_type=None, source=None):
+
         self.data = data
         self.cb_type = cb_type
         self.source: Path = source
 
-        # TODO for later: implement 
+        # TODO for later: implement KNN
+
         if cb_type == CBTypes.DF.value or cb_type == CBTypes.DF and self.data is None:
             extension = os.path.splitext(source)[-1]
+
             if extension == Extensions.CSV.value:
                 self.data = pd.read_csv(source)
             elif extension == Extensions.EXCEL.value:
@@ -35,12 +40,11 @@ class CaseBase:
         elif cb_type == CBTypes.KD_TREE:
             pass
 
-    
     def verfiy_case_structure(self, case: dict) -> bool:
 
-        if set(case.keys()) == set(self.data.columns): 
+        if set(case.keys()) == set(self.data.columns):
             return True
-        else: 
+        else:
             return False
 
     def get_index_of_case(self, value: int):
@@ -58,15 +62,15 @@ class CaseBase:
         single_case = pd.DataFrame(case, index=[0])
         self.data = self.data._append(single_case, ignore_index=True)
         return self.data
-    
+
     def delete_case_by_index(df: pd.DataFrame, index: int) -> pd.DataFrame:
 
         if index not in df.index:
             raise ValueError(f"Index {index} not found in DataFrame")
-        
+
         df = df.drop(index)
-        return df.reset_index(drop=True) 
-        
+        return df.reset_index(drop=True)
+
     def update_case(self, case_index: int, updated_case: dict):
         try:
             # Validate index range
@@ -99,7 +103,6 @@ class CaseBase:
             print(f"An unexpected error occurred while updating case: {e}")
             return False
 
-    
     def remove_cases_with_missing_values(self):
         for column in self.data.columns:
             if self.data is None:
@@ -107,8 +110,17 @@ class CaseBase:
 
         return self.data
 
-    def drop_duplicate_cases(self, dataToIgnore: list): 
-        columns = self.data.columns 
+    def drop_duplicate_cases(self, dataToIgnore: list):
+        columns = self.data.columns
         dataToConsider = [element for element in columns if element not in dataToIgnore]
-        self.data = self.data.drop_duplicates(subset=dataToConsider, keep='first', inplace=False, ignore_index=False)
+        self.data = self.data.drop_duplicates(
+            subset=dataToConsider, keep="first", inplace=False, ignore_index=False
+        )
+        return
 
+    def fill_missing_values_with_zero(self):
+        df_filled = self.data.fillna(0)
+        return df_filled
+
+    def get_case_base(self):
+        return self.data
