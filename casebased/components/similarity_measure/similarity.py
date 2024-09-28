@@ -6,6 +6,7 @@ from sklearn.neighbors import KNeighborsClassifier, NearestNeighbors
 from casebased.components.casebase.casebase import CaseBase
 from casebased.components.casebase.query_case import QueryCase
 from casebased.components.vocabulary.vocabulary import Vocabulary
+from casebased.config import Configuration
 from casebased.utils.k_algorithm import KAlgorithm
 
 from .types import SimilarityMeasureAlgorithm
@@ -16,19 +17,10 @@ class SimilarityMeasure:
     k_optimizer: Union[KAlgorithm, Callable[[Any], int]]
     similarity_measure: Union[SimilarityMeasureAlgorithm, Callable[[list, list], int]]
 
-    def __init__(
-        self,
-        k: Optional[int] = None,
-        k_optimizer: Optional[KAlgorithm] = None,
-        similarity_measure: Optional[
-            Union[SimilarityMeasureAlgorithm, Callable[[list, list], int]]
-        ] = None,
-    ):
-        # self.case_base = case_base
-        # self.vocabulary = vocabulary
-        k = k
-        k_optimizer = k_optimizer
-        similarity_measure = similarity_measure
+    def __init__(self, config: Configuration):
+        self.k = config.k or "auto"
+        self.k_optimizer = config.k_optimizer
+        self.similarity_measure = config.similarity_measure_algorithm
 
         self.classifier = None
         self.Regressor = None
@@ -40,9 +32,7 @@ class SimilarityMeasure:
         self._fit_classifier(**kwargs)
 
     def _fit_classifier(self, case_base: CaseBase, vocabulary: Vocabulary, **kwargs):
-        k = kwargs.get("k") if kwargs.get("k") else self.k
-        if k is None:
-            k = "auto"
+        k = kwargs.get("k") or self.k
         algorithm = kwargs.get("algorithm")
         weights = kwargs.get("weights")
         query = kwargs.get("query")

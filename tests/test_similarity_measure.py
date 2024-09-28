@@ -9,6 +9,7 @@ from casebased.components.casebase.query_case import QueryCase
 from casebased.components.similarity_measure.similarity import SimilarityMeasure
 from casebased.components.vocabulary.attribute import FeatureAttribute, TargetAttribute
 from casebased.components.vocabulary.vocabulary import Vocabulary
+from casebased.config import Configuration
 
 if "tests" in os.getcwd():
     source = Path("../test_data/regen.csv")
@@ -33,7 +34,8 @@ class TestSimilarityMeasure:
     vocabulary = Vocabulary(features, targets)
 
     def test_get_k_similar_cases(self):
-        similarity_measure = SimilarityMeasure()
+        config = Configuration()
+        similarity_measure = SimilarityMeasure(config)
         features = {
             "Temperatur": 18.5,
             "Luftfeuchtigkeit": 95,
