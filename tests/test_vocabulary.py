@@ -12,7 +12,7 @@ class TestVocabulary:
         FeatureAttribute("temperature", (int, float), -50, 50),
     ]
     targets = [
-        TargetAttribute("rain", (bool), False, True),
+        TargetAttribute("rain", bool, False, True),
     ]
     feature = FeatureAttribute("pressure", (int, float), 900, 1100)
 

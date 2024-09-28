@@ -35,7 +35,7 @@ class CaseBaseSystem:
             self.similarity_measure = SimilarityMeasure(
                 k=self.configuration.k,
                 similarity_measure=self.configuration.similarity_measure_algorithm,
-                k_finding=self.configuration.k_algorithm,
+                k_optimizer=self.configuration.k_optimizer,
             )
         self.case_base = CaseBase()
         self.vocabulary = Vocabulary()
@@ -63,7 +63,7 @@ class CaseBaseSystem:
             self.similarity_measure = SimilarityMeasure()
         else:
             self.similarity_measure = SimilarityMeasure(
-                k_finding=self.configuration.k_algorithm,
+                k_optimizer=self.configuration.k_optimizer,
                 k=self.configuration.k,
                 similarity_measure=self.configuration.similarity_measure_algorithm,
             )

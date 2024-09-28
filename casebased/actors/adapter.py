@@ -11,6 +11,6 @@ class Adapter:
         Adapt the solution to the case
         """
         if self.adaptation_rules is None:
-            return self.case_base.data.iloc[k_similar_cases[0]][
+            return self.case_base.cases.iloc[k_similar_cases[0]][
                 self.vocab.targets
             ].values[0]

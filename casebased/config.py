@@ -34,7 +34,7 @@ class Configuration:
     You can choose from a list of built-in algorithms or write your own algorithm and provide the function here.
     Alternatively, you can leave the field blank and the system will use the default algorithm, which is the Euclidean distance.
     """
-    k_algorithm: Union[None, KAlgorithm, Callable] = None
+    k_optimizer: Union[None, KAlgorithm, Callable] = None
     """
     Define the algorithm that should be used to find the optimal number of cases to retrieve from the case base.
     Here you can also just set it to None or leave it blank, and it will use the Elbow method to get a k.

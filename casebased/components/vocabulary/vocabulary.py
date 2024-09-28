@@ -21,15 +21,23 @@ class Vocabulary:
 
     def __init__(
         self,
-        features: List[FeatureAttribute],
-        targets: List[TargetAttribute],
+        features: List[FeatureAttribute] = None,
+        targets: List[TargetAttribute] = None,
         retrieval_attributes=None,
     ):
         self.features = features
-        self.feature_names: List[str] = [x.name for x in features]
+        if features is not None:
+            self.feature_names: List[str] = [x.name for x in features]
+            self.weights = [x.weight for x in features]
+        else:
+            self.feature_names: List[str] = []
+            self.weights = []
         self.targets = targets
-        self.target_names: List[str] = [x.name for x in targets]
-        self.weights = [x.weight for x in features]
+        if targets is not None:
+            self.target_names: List[str] = [x.name for x in targets]
+        else:
+            self.target_names: List[str] = []
+
         if retrieval_attributes is None:
             retrieval_attributes = self.feature_names
         self.retrieval_attributes: List[str] = retrieval_attributes
@@ -104,18 +112,18 @@ class Vocabulary:
             self.retrieval_attributes.insert(position, ra_name)
         return
 
-    def compile_weights(self, casebase: CaseBase, method="korr"):
+    def compile_weights(self, case_base: CaseBase, method="korr"):
         """
         Compile the weights for the features in the vocabulary.
         Args:
-            casebase: CaseBase: The case base for which the weights are compiled
+            case_base: CaseBase: The case base for which the weights are compiled
             method: str: The method to use to compile the weights (default: "korr")
         """
         if method == "korr":
             # TODO: Find solution for when targets are not in the data
             #   or when targets are not the last columns
             corr_mat = (
-                casebase.data[self.feature_names + self.target_names]
+                case_base.cases[self.feature_names + self.target_names]
                 .corr()[self.targets]
                 .iloc[:-1]
             )
