@@ -11,26 +11,26 @@ class CaseBase:
     This case based can then be stored in a file and used for case based reasoning.
     """
 
-    def __init__(self, df=pd.DataFrame(), path=None):
-        self.df = df.copy()
+    def __init__(self, cases=pd.DataFrame(), path=None):
+        self.cases = cases.copy()
         self.path: Path = path
         # add utility column and set it to 0 for all cases
-        self.df["utility"] = 0
+        self.cases["utility"] = 0
 
     def set_utility(self, row: int, utility: int):
-        if row < 0 or row > len(self.df):
+        if row < 0 or row > len(self.cases):
             raise ValueError("Row index out of bounds")
         if utility < 0:
             raise ValueError("Utility must be greater than 0")
         if not isinstance(utility, int):
             raise ValueError("Utility must be of type int")
-        self.df.iloc[row]["utility"] = utility
+        self.cases.iloc[row]["utility"] = utility
 
     def clean_unused_cases(self):
-        self.df = self.df[self.df["utility"] > 0]
+        self.cases = self.cases[self.cases["utility"] > 0]
 
     def add_case(self, case):
-        self.df = self.df.append(case, ignore_index=True)
+        self.cases = self.cases.append(case, ignore_index=True)
 
     def remove_case(self, case):
         pass

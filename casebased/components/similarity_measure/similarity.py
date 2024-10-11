@@ -6,6 +6,7 @@ from sklearn.neighbors import KNeighborsClassifier, NearestNeighbors
 from casebased.components.casebase.casebase import CaseBase
 from casebased.components.casebase.query_case import QueryCase
 from casebased.components.vocabulary import Vocabulary
+from casebased.config import Configuration
 from casebased.utils.k_algorithm import KAlgorithm
 
 from .types import SimilarityMeasureAlgorithm
@@ -13,12 +14,14 @@ from .types import SimilarityMeasureAlgorithm
 
 class SimilarityMeasure:
     k: Optional[int]
-    k_finding: Union[KAlgorithm, Callable[[Any], int]]
+    k_optimizer: Union[KAlgorithm, Callable[[Any], int]]
     similarity_measure: Union[SimilarityMeasureAlgorithm, Callable[[list, list], int]]
 
-    def __init__(self, case_base: CaseBase, vocabulary: Vocabulary):
-        self.case_base = case_base
-        self.vocabulary = vocabulary
+    def __init__(self, config: Configuration):
+        self.k = config.k or "auto"
+        self.k_optimizer = config.k_optimizer
+        self.similarity_measure = config.similarity_measure_algorithm
+
         self.classifier = None
         self.Regressor = None
 
@@ -28,8 +31,8 @@ class SimilarityMeasure:
                 self._fit_classifier(**kwargs)
         self._fit_classifier(**kwargs)
 
-    def _fit_classifier(self, **kwargs):
-        k = kwargs.get("k")
+    def _fit_classifier(self, case_base: CaseBase, vocabulary: Vocabulary, **kwargs):
+        k = kwargs.get("k") or self.k
         algorithm = kwargs.get("algorithm")
         weights = kwargs.get("weights")
         query = kwargs.get("query")
@@ -62,6 +65,8 @@ class SimilarityMeasure:
         self,
         query: QueryCase,
         k,
+        case_base: CaseBase,
+        vocabulary: Vocabulary,
         return_distance=False,
         algorithm="auto",
         weighted=False,
@@ -79,7 +84,7 @@ class SimilarityMeasure:
                 n_neighbors=k,
                 algorithm=algorithm,
                 metric="minkowski",
-                metric_params={"w": self.vocabulary.weights},
+                metric_params={"w": vocabulary.weights},
             ).fit(x)
         else:
             neighbors = NearestNeighbors(n_neighbors=k, algorithm=algorithm).fit(x)
