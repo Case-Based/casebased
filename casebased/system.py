@@ -32,15 +32,9 @@ class CaseBaseSystem:
         self.case_base = CaseBase()
         self.vocabulary = Vocabulary([], [])
         if self.configuration is None:
-            self.similarity_measure = SimilarityMeasure(
-                case_base=self.case_base,
-                vocabulary=self.vocabulary,
-            )
+            self.similarity_measure = SimilarityMeasure(Configuration())
         else:
-            self.similarity_measure = SimilarityMeasure(
-                case_base=self.case_base,
-                vocabulary=self.vocabulary,
-            )
+            self.similarity_measure = SimilarityMeasure(self.configuration)
 
     def change_config(self, config: Configuration):
         """
@@ -62,12 +56,6 @@ class CaseBaseSystem:
         """
         self.configuration = config
         if self.configuration is None:
-            self.similarity_measure = SimilarityMeasure(
-                case_base=self.case_base,
-                vocabulary=self.vocabulary,
-            )
+            self.similarity_measure = SimilarityMeasure(Configuration())
         else:
-            self.similarity_measure = SimilarityMeasure(
-                case_base=self.case_base,
-                vocabulary=self.vocabulary,
-            )
+            self.similarity_measure = SimilarityMeasure(self.configuration)

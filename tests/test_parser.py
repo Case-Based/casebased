@@ -1,5 +1,5 @@
+from casebased.components.vocabulary import Parser
 from casebased.components.vocabulary.conditions import ConditionType
-from casebased.components.vocabulary.parser import Parser
 
 
 def test__generate_vocabulary_from_toml():
