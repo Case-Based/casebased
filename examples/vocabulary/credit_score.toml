@@ -1,0 +1,47 @@
+# Feature attributes
+[income]
+type = "float"
+weight = 1.23
+conditions = [
+    { operator = "gte", value = 0.0 }
+]
+is_target = "false"
+
+[account_balance]
+type = "float"
+weight = 1.5
+conditions = []
+is_target = "false"
+
+[average_expenses]
+type = "float"
+weight = 1.75
+conditions = [
+    { operator = "gte", value = 0.0 }
+]
+is_target = "false"
+
+[age]
+type = "int"
+weight = 1.0
+conditions = [
+    { operator = "gte", value = 0 }
+]
+is_target = "false"
+
+[count_balance_in_dispo]
+type = "int"
+weight = 2.5
+conditions = [
+    { operator = "gte", value = 0 }
+]
+is_target = "false"
+
+# Target attributes
+[credit_score]
+type = "float"
+conditions = [
+    { operator = "gte", value = 0.0 },
+    { operator = "lte", value = 100.0 }
+]
+is_target = "true"
