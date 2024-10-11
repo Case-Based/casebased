@@ -102,10 +102,6 @@ class Vocabulary:
                 return attr
         return None
 
-    @staticmethod
-    def generate_from_data_source():
-        pass
-
     @property
     def features(self):
         """
@@ -138,11 +134,15 @@ class Parser:
             file_path: str
         """
         raw_vocab = vocabulary.to_dict()
-        file_name = file_path.split("/")[-1]
-        file_extension = file_name.split(".")[-1]
-        if file_extension not in ("toml", "TOML"):
-            path = file_path.split("/")[:-1]
-        with open(file_path, "w") as file:
+        path_list = file_path.split("/")
+        file_comps = path_list[-1].split(".")
+        folder_path = path_list[:-1]
+        new_path = (
+            folder_path + [".".join(file_comps + ["toml"])]
+            if file_comps[-1] != "toml"
+            else path_list
+        )
+        with open("/".join(new_path), "w") as file:
             toml.dump(raw_vocab, file)
 
     @staticmethod
