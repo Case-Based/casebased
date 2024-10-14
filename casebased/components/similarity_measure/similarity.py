@@ -5,7 +5,7 @@ from sklearn.neighbors import KNeighborsClassifier, NearestNeighbors
 
 from casebased.components.casebase.casebase import CaseBase
 from casebased.components.casebase.query_case import QueryCase
-from casebased.components.vocabulary.vocabulary import Vocabulary
+from casebased.components.vocabulary import Vocabulary
 from casebased.config import Configuration
 from casebased.utils.k_algorithm import KAlgorithm
 
@@ -37,8 +37,8 @@ class SimilarityMeasure:
         weights = kwargs.get("weights")
         query = kwargs.get("query")
 
-        x = case_base.cases[vocabulary.feature_names].values
-        y = case_base.cases[vocabulary.targets].values.reshape(-1)
+        x = self.case_base.df[self.vocabulary.feature_names].values
+        y = self.case_base.df[self.vocabulary.targets].values.reshape(-1)
 
         if k == "auto" or k is None or k == 0 or weights == "auto" or weights is None:
             param_grid = {
@@ -75,9 +75,9 @@ class SimilarityMeasure:
         Get the k most similar cases to a given case
         """
         try:
-            x = case_base.cases[vocabulary.feature_names].values
+            x = self.case_base.df[self.vocabulary.feature_names].values
         except KeyError:
-            x = case_base.cases[vocabulary.feature_names].values
+            x = self.case_base.df[self.vocabulary.feature_names].values
 
         if weighted:
             neighbors = NearestNeighbors(
