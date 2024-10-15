@@ -8,7 +8,7 @@
 [![Security: bandit](https://img.shields.io/badge/security-bandit-green.svg)](https://github.com/PyCQA/bandit)
 [![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/Case-Based/casebased/blob/main/.pre-commit-config.yaml)
 [![Semantic Versions](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--versions-e10079.svg)](https://github.com/Case-Based/casebased/releases)
-[![License](https://img.shields.io/github/license/casebased/casebased)](https://github.com/Case-Based/casebased/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/Case-Based/casebased)](https://github.com/Case-Based/casebased/blob/master/LICENSE)
 ![Coverage Report](assets/images/coverage.svg)
 
 ---
@@ -21,7 +21,7 @@
 
 [![PyPI Version](https://img.shields.io/pypi/v/casebased.svg)](https://pypi.org/project/casebased/)
 [![Python Versions](https://img.shields.io/pypi/pyversions/casebased.svg)](https://pypi.org/project/casebased/)
-[![License](https://img.shields.io/pypi/l/casebased.svg)](https://github.com/your-username/casebased/blob/main/LICENSE)
+[![License](https://img.shields.io/pypi/l/casebased.svg)](https://github.com/Case-Based/casebased/blob/main/LICENSE)
 
 **Casebased** is a Python library that provides a flexible and extensible framework for implementing case-based reasoning (CBR) systems. CBR is a problem-solving paradigm that focuses on solving new problems by adapting solutions that were used to solve similar past problems.
 
@@ -119,7 +119,7 @@ You can update it in [`release-drafter.yml`](https://github.com/casebased/caseba
 GitHub creates the `bug`, `enhancement`, and `documentation` labels for you. Dependabot creates the `dependencies` label. Create the remaining labels on the Issues tab of your GitHub repository, when you need them.
 
 ## 🛡 License
-[![License](https://img.shields.io/github/license/casebased/casebased)](https://github.com/Case-Based/casebased/blob/main/LICENSE)
+[![License](https://img.shields.io/github/license/Case-Based/casebased)](https://github.com/Case-Based/casebased/blob/main/LICENSE)
 
 This project is licensed under the terms of the `MIT` license. See [LICENSE](https://github.com/Case-Based/casebased/blob/main/LICENSE) for more details.
 
