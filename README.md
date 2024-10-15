@@ -6,7 +6,7 @@
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Security: bandit](https://img.shields.io/badge/security-bandit-green.svg)](https://github.com/PyCQA/bandit)
-[![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/Case-Based/casebased/blob/master/.pre-commit-config.yaml)
+[![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/Case-Based/casebased/blob/main/.pre-commit-config.yaml)
 [![Semantic Versions](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--versions-e10079.svg)](https://github.com/Case-Based/casebased/releases)
 [![License](https://img.shields.io/github/license/casebased/casebased)](https://github.com/Case-Based/casebased/blob/master/LICENSE)
 ![Coverage Report](assets/images/coverage.svg)
@@ -114,15 +114,14 @@ We use [`Release Drafter`](https://github.com/marketplace/actions/release-drafte
 |            `documentation`            |    📝 Documentation     |
 |            `dependencies`             | ⬆️ Dependencies updates |
 
-You can update it in [`release-drafter.yml`](https://github.com/casebased/casebased/blob/master/.github/release-drafter.yml).
+You can update it in [`release-drafter.yml`](https://github.com/casebased/casebased/blob/main/.github/release-drafter.yml).
 
 GitHub creates the `bug`, `enhancement`, and `documentation` labels for you. Dependabot creates the `dependencies` label. Create the remaining labels on the Issues tab of your GitHub repository, when you need them.
 
 ## 🛡 License
+[![License](https://img.shields.io/github/license/casebased/casebased)](https://github.com/Case-Based/casebased/blob/main/LICENSE)
 
-[![License](https://img.shields.io/github/license/casebased/casebased)](https://github.com/casebased/casebased/blob/master/LICENSE)
-
-This project is licensed under the terms of the `MIT` license. See [LICENSE](https://github.com/casebased/casebased/blob/master/LICENSE) for more details.
+This project is licensed under the terms of the `MIT` license. See [LICENSE](https://github.com/Case-Based/casebased/blob/main/LICENSE) for more details.
 
 ## 📃 Citation
 
