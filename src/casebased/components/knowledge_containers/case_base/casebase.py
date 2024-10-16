@@ -27,18 +27,30 @@ class CaseBase:
 
             if extension == Extensions.CSV.value:
                 self.data = pd.read_csv(source)
+                self._create_util_row()
             elif extension == Extensions.EXCEL.value:
                 self.data = pd.read_excel(source)
+                self._create_util_row()
             elif extension == Extensions.JSON.value:
                 self.data = pd.read_json(source)
+                self._create_util_row()
             elif extension == Extensions.XML.value:
                 self.data = pd.read_xml(source)
+                self._create_util_row()
             elif extension == Extensions.SQL.value:
                 self.data = pd.read_sql(source)
+                self._create_util_row()
             else:
                 raise ValueError("No valid file extension")
         elif cb_type == CBTypes.KD_TREE:
             pass
+
+    def _create_util_row(self) -> pd.DataFrame:
+        self.data["utils"] = 0
+        return self.data
+    
+    def _increase_util(self, case_index: int) -> bool:
+        pass
 
     def verfiy_case_structure(self, case: dict) -> bool:
 

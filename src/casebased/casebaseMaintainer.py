@@ -21,8 +21,7 @@ class CaseBaseMaintainer:
         if validate: 
             if CB.validate_data(data): 
                 CB.verify_case_structue(data) 
-                # TODO
-                # add function in the case base, to fill up missing values with '0'
+                CB.fill_missing_values_with_zero()
                 data_to_be_added = pd.DataFrame(data)
                 CB.add_data(data_to_be_added)
                 return 
@@ -31,7 +30,7 @@ class CaseBaseMaintainer:
             CB.add_data(data_to_be_added)  
             return 
         
-    def update_utils(self, case: list): 
+    def update_utils(self, case: list) -> None: 
         '''
         Increase the utils count for (retrieved) cases used to solve problem.
         Params: case: list of dicts 
@@ -39,7 +38,7 @@ class CaseBaseMaintainer:
         # update_utils()
 
         # case base -> feature -> wenn index genommen wird 
-        # überall wo fall gebommen wird, utility erhöhen 
+        # überall wo fall genommen wird, utility erhöhen 
         # pandas documentation -> save dataframe 
         # utility mitspeichern 
 
@@ -53,7 +52,7 @@ class CaseBaseMaintainer:
         # after ~ 100 iterations of the program, remove cases with lower util score than 3
         return 
 
-    def prune(threshold: int): 
+    def prune(threshold: int) -> None: 
         
         ''''
         Removes cases from the case base that aren't used often enough. 
@@ -72,4 +71,4 @@ class CaseBaseMaintainer:
     
     def get_current_casebase(): 
         case_base = CB.get_case_base()
-        return 
+        return case_base
