@@ -1,8 +1,7 @@
-from typing import Callable, Optional, Union
+from typing import Callable, Literal, Optional, Union
 
 from dataclasses import dataclass
 
-from .components.similarity_measure.types import SimilarityMeasureAlgorithm
 from .utils.k_algorithm import KAlgorithm
 
 
@@ -26,9 +25,15 @@ class Configuration:
             However, unless you are not using an algorithm to find the optimal k yourself, we discourage people to manually type in the k, because the solution may be bad.
     """
 
-    similarity_measure_algorithm: Union[
-        None, SimilarityMeasureAlgorithm, Callable[[list, list], int]
-    ] = None
+    similarity_measure_metric: Union[None, str, Callable[[list, list], int]] = None
+    """
+    This attribute determines which algorithm will be used to calculate the distance between cases, which is a key point in CBR.
+    You can choose from a list of built-in algorithms or write your own algorithm and provide the function here.
+    
+    """
+    similarity_measure_algorithm: Literal["auto", "kd-tree", "brute", "ball-tree"] = (
+        "auto"
+    )
     """
     This attribute determines which algorithm will be used to calculate the distance between cases, which is a key point in CBR.
     You can choose from a list of built-in algorithms or write your own algorithm and provide the function here.
@@ -44,4 +49,15 @@ class Configuration:
     """
     You can also manually define the number of cases that should be retrieved with this attribute.
     However, unless you are not using an algorithm to find the optimal k yourself, we discourage people to manually type in the k, because the solution may be bad.
+    """
+    feature_weights: Optional[list[float]] | str = None
+    """
+    Define the weights for each feature in the case base.
+    This can be useful if you want to give more importance to certain features.
+    If the weights are not known to you, you can also set the weights to "auto" and the system will find the optimal weights for you.
+    """
+    minkowski_p: Optional[int] = 1
+    """
+    Define the p-value for the Minkowski distance.
+    The Minkowski distance is a generalization of the Euclidean distance and the Manhattan distance.
     """

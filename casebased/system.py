@@ -1,5 +1,6 @@
 from typing import Optional
 
+from .actors.retriever import Retriever
 from .components.casebase.casebase import CaseBase
 from .components.similarity_measure.similarity import SimilarityMeasure
 from .components.vocabulary.vocabulary import Vocabulary
@@ -15,7 +16,11 @@ class CaseBaseSystem:
     """
     With the configuration you can change the behavior of the case-base system.
     """
-    similarity_measure: SimilarityMeasure
+
+    # ACTORS AND PHASES
+    retriever: Retriever
+
+    # COMPONENTS AND KNOWLEDGE
     case_base: CaseBase
     vocabulary: Vocabulary
 
@@ -31,9 +36,9 @@ class CaseBaseSystem:
         self.configuration = configuration
         default_config = Configuration()  # TODO: Create default configuration behavior
         if self.configuration is None:
-            self.similarity_measure = SimilarityMeasure(default_config)
+            self.retriever = Retriever(default_config)
         else:
-            self.similarity_measure = SimilarityMeasure(configuration)
+            self.retriever = Retriever(configuration)
         self.case_base = CaseBase()
         self.vocabulary = Vocabulary()
 
