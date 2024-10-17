@@ -8,7 +8,7 @@ from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
 from casebased.components.casebase.casebase import CaseBase
 from casebased.components.casebase.query_case import QueryCase
 from casebased.components.similarity_measure.similarity import SimilarityMeasure
-from casebased.components.vocabulary.vocabulary import Vocabulary
+from casebased.components.vocabulary import Vocabulary
 from casebased.config import Configuration
 
 

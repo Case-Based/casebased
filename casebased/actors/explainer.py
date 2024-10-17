@@ -10,7 +10,7 @@ from typing import List
 
 from casebased.components.casebase.casebase import CaseBase
 from casebased.components.explainer.explanation import Explanation
-from casebased.components.vocabulary.vocabulary import Vocabulary
+from casebased.components.vocabulary import Vocabulary
 
 
 class Explainer:

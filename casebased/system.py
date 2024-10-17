@@ -3,7 +3,7 @@ from typing import Optional
 from .actors.retriever import Retriever
 from .components.casebase.casebase import CaseBase
 from .components.similarity_measure.similarity import SimilarityMeasure
-from .components.vocabulary.vocabulary import Vocabulary
+from .components.vocabulary import Vocabulary
 from .config import Configuration
 
 
@@ -40,7 +40,11 @@ class CaseBaseSystem:
         else:
             self.retriever = Retriever(configuration)
         self.case_base = CaseBase()
-        self.vocabulary = Vocabulary()
+        self.vocabulary = Vocabulary([], [])
+        if self.configuration is None:
+            self.similarity_measure = SimilarityMeasure(Configuration())
+        else:
+            self.similarity_measure = SimilarityMeasure(self.configuration)
 
     def change_config(self, config: Configuration):
         """
@@ -62,6 +66,6 @@ class CaseBaseSystem:
         """
         self.configuration = config
         if self.configuration is None:
-            self.similarity_measure = SimilarityMeasure()
+            self.similarity_measure = SimilarityMeasure(Configuration())
         else:
             self.similarity_measure = SimilarityMeasure(self.configuration)
