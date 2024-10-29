@@ -34,7 +34,7 @@ python = "^3.9"
 numpy = "^1.9.0"
 pandas = "^2.2.2"
 scikit-learn = "^1.5.1"
-langchain = "^0.2.16"
+langchain = "^0.3.0"
 ollama = "^0.3.3"
 toml = "^0.10.2"
 
