@@ -1,12 +1,12 @@
 import pytest
 
-from casebased.components.casebase.query_case import QueryCase
+from casebased.components.casebase.query import Query
 
 feature_obj = {"A": 1, "B": 2, "C": 3}
 
 
 def make_case():
-    return QueryCase(feature_obj)
+    return Query(feature_obj)
 
 
 class TestQueryCase:
@@ -18,12 +18,12 @@ class TestQueryCase:
     def test__init__value_error(self):
         feature_obj_mixed = {"A": "eins", "B": "zwei", "C": 3}
         with pytest.raises(ValueError) as ve:
-            case = QueryCase(feature_obj_mixed)
+            case = Query(feature_obj_mixed)
 
     def test__init__list(self):
         feature_arr = [1, 2, 3]
         with pytest.raises(ValueError) as ve:
-            case = QueryCase(feature_arr)
+            case = Query(feature_arr)
 
     def test_get_1d_feature_array(self):
         case = make_case()

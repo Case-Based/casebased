@@ -2,8 +2,6 @@ import pytest
 
 from casebased.components.vocabulary.attribute import (
     Attribute,
-    FeatureAttribute,
-    TargetAttribute,
 )
 from casebased.components.vocabulary.conditions import Condition, ConditionType
 from casebased.utils.errors import InvalidAttributeTypeError, InvalidAttributeValueError
@@ -314,36 +312,6 @@ TEST_CASES_CHECK_ALL = [
         ],
     }
 ]
-
-
-def test__target_attribute_creation():
-    attr = TargetAttribute(
-        name="Test attribute",
-        conditions=[],
-        data_type=int,
-    )
-    assert attr is not None
-    assert attr.is_target is True
-    assert attr.weight == 1.0
-    assert attr.name == "Test attribute"
-    assert attr.data_type is int
-    assert len(attr.conditions) == 0
-
-
-def test__feature_attribute_creation():
-    attr = FeatureAttribute(
-        name="Feature attr",
-        conditions=[],
-        data_type=float,
-        weight=10.0,
-    )
-    assert attr is not None
-    assert attr.name == "Feature attr"
-    assert attr.weight == 10.0
-    assert attr.is_target is False
-    assert attr.data_type is float
-    assert len(attr.conditions) == 0
-
 
 def test__attribute_from_dict():
     for test in ATTRIBUTE_FROM_DICT_TEST_PROPS:
