@@ -18,10 +18,13 @@ class Retriever:
         weighted=False,
         return_distance: bool = False,
     ):
-        return self.similarity_measure.get_k_similar_cases(
+        cases = self.similarity_measure.get_k_similar_cases(
             query=query,
             k=k,
             algorithm="auto",
             return_distance=return_distance,
             weighted=weighted,
         )
+        for case in cases:
+            self.case_base.cases["utility"] += 1 # increment utility count
+        return cases
