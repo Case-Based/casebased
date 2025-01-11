@@ -1,7 +1,9 @@
+import os
+
+import pandas as pd
 from casebased.components.casebase.casebase import CaseBase
 from casebased.components.casebase.data_source_adapter import DataSourceAdapter
-import pandas as pd
-import os 
+
 
 class TestDataSourceAdapter:
 
@@ -153,7 +155,7 @@ class TestDataSourceAdapter:
     def test_update_data_source(self):
 
         path_to_update_csv = "test_data/update_csv.csv"
-        
+
         initial_data = [
             {
                 "Fallnummer": 1,
@@ -202,9 +204,13 @@ class TestDataSourceAdapter:
         ]
 
         with open("test_data/update_csv.csv", "w") as f:
-            f.write("Fallnummer,Temperatur,Luftfeuchtigkeit,Luftdruck,Windgeschwindigkeit,Laengengrad,Breitengrad,Regen?,utility\n")
+            f.write(
+                "Fallnummer,Temperatur,Luftfeuchtigkeit,Luftdruck,Windgeschwindigkeit,Laengengrad,Breitengrad,Regen?,utility\n"
+            )
             for row in initial_data:
-                f.write(f"{row['Fallnummer']},{row['Temperatur']},{row['Luftfeuchtigkeit']},{row['Luftdruck']},{row['Windgeschwindigkeit']},{row['Laengengrad']},{row['Breitengrad']},{row['Regen?']},{row['utility']}\n")
+                f.write(
+                    f"{row['Fallnummer']},{row['Temperatur']},{row['Luftfeuchtigkeit']},{row['Luftdruck']},{row['Windgeschwindigkeit']},{row['Laengengrad']},{row['Breitengrad']},{row['Regen?']},{row['utility']}\n"
+                )
 
         data_source_adapter = DataSourceAdapter(path_to_update_csv)
         initial_dataframe = data_source_adapter.read_file()

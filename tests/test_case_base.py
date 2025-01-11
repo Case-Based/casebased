@@ -1,11 +1,12 @@
-import pytest
-import pandas as pd
-from pathlib import Path
 import tempfile
-from pandas._typing import FilePath
-from casebased.components.constants import CBTypes
-from casebased.components.casebase.casebase import CaseBase
+from pathlib import Path
+
+import pandas as pd
 import pandas.testing as pd_testing
+import pytest
+from casebased.components.casebase.casebase import CaseBase
+from casebased.components.constants import CBTypes
+from pandas._typing import FilePath
 
 
 def read_csv_to_pd(file_path: FilePath) -> pd.DataFrame:

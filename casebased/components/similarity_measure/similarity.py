@@ -1,13 +1,12 @@
 from typing import Any, AnyStr, Callable, Optional, Union
 
-from sklearn.model_selection import GridSearchCV
-from sklearn.neighbors import KNeighborsClassifier, NearestNeighbors
-
 from casebased.components.casebase.casebase import CaseBase
 from casebased.components.casebase.query_case import QueryCase
 from casebased.components.vocabulary import Vocabulary
 from casebased.config import Configuration
 from casebased.utils.k_algorithm import KAlgorithm
+from sklearn.model_selection import GridSearchCV
+from sklearn.neighbors import KNeighborsClassifier, NearestNeighbors
 
 from .types import SimilarityMeasureAlgorithm
 

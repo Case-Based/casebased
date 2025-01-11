@@ -1,9 +1,11 @@
-from casebased.components.casebase.casebase import CaseBase
-import pandas as pd
 from typing import Callable, Optional
+
+import csv
 import os
-import csv 
-from pathlib import Path 
+from pathlib import Path
+
+import pandas as pd
+from casebased.components.casebase.casebase import CaseBase
 
 
 class DataSourceAdapter:
@@ -129,33 +131,35 @@ class DataSourceAdapter:
             print(f"Error reading Excel file: {str(e)}")
             return None
 
-    def add_utility_column(self): 
+    def add_utility_column(self):
         """
         Public function to add a utility column to the datasource itself (e.g. a csv file)
 
-        Structure: 
+        Structure:
         Column1 | Column2 | ... | utility
-        Value1  | Value2  | ... | 0 
-        Value1  | Value2  | ... | 0 
+        Value1  | Value2  | ... | 0
+        Value1  | Value2  | ... | 0
 
         Paraemters:
 
         """
 
-        try: 
+        try:
 
-            with open (self.path, 'a') as file: 
-            
-                file.write('utility\n')
-                file.write('0\n')
+            with open(self.path, "a") as file:
+
+                file.write("utility\n")
+                file.write("0\n")
 
                 file.close()
 
-        except (FileExistsError, FileNotFoundError): 
+        except (FileExistsError, FileNotFoundError):
 
-            print("Enteres file path could not be found. Modify the location and try again!") 
-            raise(FileExistsError, FileNotFoundError) 
-        
+            print(
+                "Enteres file path could not be found. Modify the location and try again!"
+            )
+            raise (FileExistsError, FileNotFoundError)
+
     def update_data_source(self, case_base: CaseBase) -> None:
         """
         Updates the original data source file with the current state of the case base.

@@ -26,5 +26,5 @@ class Retriever:
             weighted=weighted,
         )
         for case in cases:
-            self.case_base.cases["utility"] += 1 # increment utility count
+            self.case_base.cases["utility"] += 1  # increment utility count
         return cases
