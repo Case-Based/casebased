@@ -21,9 +21,10 @@ class Levenshtein(SimilarityFunction):
                 current_row.append(min(insertions, deletions, substitutions))
             print(current_row)
             previous_row = current_row
-        
+
         return previous_row[-1]
-    
+
+
 class JaroDistance(SimilarityFunction):
     def calculate(self, x: str, y: str) -> float:
         if x == y:
@@ -42,7 +43,7 @@ class JaroDistance(SimilarityFunction):
         for i in range(len_x):
             start = max(0, i - match_distance)
             end = min(i + match_distance + 1, len_y)
-            
+
             for j in range(start, end):
                 if not y_matches[j] or x[i] == y[j]:
                     x_matches[i] = y_matches[j] = True
@@ -57,26 +58,31 @@ class JaroDistance(SimilarityFunction):
                     if x[i] != y[k]:
                         transpositions += 1
                     k += 1
-            
+
             if matches == 0:
-                return .0
+                return 0.0
 
             transpositions = transpositions // 2
-            return (matches / len_x + matches / len_y + (matches - transpositions) / matches) / 3.0
-        
+            return (
+                matches / len_x + matches / len_y + (matches - transpositions) / matches
+            ) / 3.0
+
+
 class JaroWinkler(SimilarityFunction):
     def __init__(self, prefix_weight: float) -> None:
         self.__prefix_weight = prefix_weight
-    
+
     def calculate(self, x: str, y: str) -> float:
         jaro_dist = JaroDistance().calculate(x, y)
-    
+
         prefix = 0
         for i in range(min(len(x), len(y), 4)):
             if x[i] != y[i]:
                 break
             prefix += 1
-        
-        jaro_winkler_dist = jaro_dist + (prefix * self.__prefix_weight * (1.0 - jaro_dist))
-        
+
+        jaro_winkler_dist = jaro_dist + (
+            prefix * self.__prefix_weight * (1.0 - jaro_dist)
+        )
+
         return min(jaro_winkler_dist, 1.0)

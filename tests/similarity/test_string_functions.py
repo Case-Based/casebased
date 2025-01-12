@@ -1,11 +1,24 @@
-from casebased.components.similarity_measure.functions import Levenshtein, JaroDistance, JaroWinkler
-
+from casebased.components.similarity_measure.functions import (
+    JaroDistance,
+    JaroWinkler,
+    Levenshtein,
+)
 
 test_cases = [
-    { "x": "kitten", "y": "sitten", "prefix_weight": .1, "results": { "levenshtein": 1, "jaro": 1.0, "jaro_winkler": 0, }, },
+    {
+        "x": "kitten",
+        "y": "sitten",
+        "prefix_weight": 0.1,
+        "results": {
+            "levenshtein": 1,
+            "jaro": 1.0,
+            "jaro_winkler": 0,
+        },
+    },
 ]
 
-for case in test_cases: 
+for case in test_cases:
+
     def test_levenshtein_distance():
         pass
         # dist = Levenshtein().calculate(case.get("x"), case.get("y"))

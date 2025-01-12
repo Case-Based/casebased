@@ -1,5 +1,8 @@
+from casebased.components.similarity_measure.functions import (
+    LinearInterval,
+    SquaredDistance,
+)
 from casebased.components.similarity_measure.schema import SimilaritySchema
-from casebased.components.similarity_measure.functions import SquaredDistance, LinearInterval
 
 
 def test_build_similarity_schema():
@@ -11,7 +14,7 @@ def test_build_similarity_schema():
         threshold=5,
         limit=10,
     )
-    
+
     assert len(similarity_schema.attributes) == 2
     assert similarity_schema.threshold == 5
     assert similarity_schema.limit == 10
