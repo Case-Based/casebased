@@ -9,13 +9,13 @@ from casebased.components.vocabulary import Vocabulary
 from casebased.config import Configuration
 from casebased.utils.k_algorithm import KAlgorithm
 
-from .types import SimilarityMeasureAlgorithm
+from .types import SimilarityFunction
 
 
 class SimilarityMeasure:
     k: Optional[int]
     k_optimizer: Union[KAlgorithm, Callable[[Any], int]]
-    similarity_measure: Union[SimilarityMeasureAlgorithm, Callable[[list, list], int]]
+    similarity_measure: Union[SimilarityFunction, Callable[[list, list], int]]
 
     def __init__(self, config: Configuration):
         self.k = config.k or "auto"

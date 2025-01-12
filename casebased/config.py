@@ -2,7 +2,7 @@ from typing import Callable, Optional, Union
 
 from dataclasses import dataclass
 
-from .components.similarity_measure.types import SimilarityMeasureAlgorithm
+from .components.similarity_measure.types import SimilarityFunction
 from .utils.k_algorithm import KAlgorithm
 
 
@@ -27,7 +27,7 @@ class Configuration:
     """
 
     similarity_measure_algorithm: Union[
-        None, SimilarityMeasureAlgorithm, Callable[[list, list], int]
+        None, SimilarityFunction, Callable[[list, list], int]
     ] = None
     """
     This attribute determines which algorithm will be used to calculate the distance between cases, which is a key point in CBR.
