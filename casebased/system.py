@@ -1,7 +1,8 @@
 from typing import Optional
 
+from casebased.components.similarity_measure import SimilaritySchema
+
 from .components.casebase.casebase import CaseBase
-from .components.similarity_measure.similarity import SimilarityMeasure
 from .components.vocabulary import Vocabulary
 from .config import Configuration
 
@@ -15,11 +16,15 @@ class CaseBaseSystem:
     """
     With the configuration you can change the behavior of the case-base system.
     """
-    similarity_measure: SimilarityMeasure
+    similarity_schema: SimilaritySchema
     case_base: CaseBase
     vocabulary: Vocabulary
 
-    def __init__(self, configuration=None):
+    def __init__(
+        self,
+        similarity_schema: Optional[SimilaritySchema],
+        configuration: Optional[Configuration],
+    ):
         """
         Create a case-based system with whom you can solve new cases based on a database of old cases called the case base.
 
@@ -28,13 +33,10 @@ class CaseBaseSystem:
             configuration : Optional[Configuration]
                 Provide the configuration that will define which algorithms to use.
         """
-        self.configuration = configuration
+        self.configuration = configuration or None
         self.case_base = CaseBase()
         self.vocabulary = Vocabulary([], [])
-        if self.configuration is None:
-            self.similarity_measure = SimilarityMeasure(Configuration())
-        else:
-            self.similarity_measure = SimilarityMeasure(self.configuration)
+        self.similarity_schema = similarity_schema
 
     def change_config(self, config: Configuration):
         """
@@ -55,7 +57,3 @@ class CaseBaseSystem:
             None
         """
         self.configuration = config
-        if self.configuration is None:
-            self.similarity_measure = SimilarityMeasure(Configuration())
-        else:
-            self.similarity_measure = SimilarityMeasure(self.configuration)

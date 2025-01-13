@@ -1,13 +1,12 @@
 from casebased.components.casebase.casebase import CaseBase
 from casebased.components.casebase.query_case import QueryCase
-from casebased.components.similarity_measure.similarity import SimilarityMeasure
 from casebased.components.vocabulary import Vocabulary
 
 
 class Retriever:
-    def __init__(self, case_base, similarity_measure, vocab):
+    def __init__(self, case_base, similarity_schema, vocab):
         self.case_base: CaseBase = case_base
-        self.similarity_measure: SimilarityMeasure = similarity_measure
+        self.similarity_schema = similarity_schema
         self.vocab: Vocabulary = vocab
 
     def retrieve(
