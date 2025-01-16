@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+
 from .attribute import FeatureAttribute, TargetAttribute
 
 

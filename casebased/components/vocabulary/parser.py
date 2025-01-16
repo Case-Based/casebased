@@ -1,6 +1,7 @@
-from .vocabulary import Vocabulary
 import toml
+
 from .attribute import Attribute
+from .vocabulary import Vocabulary
 
 
 class Parser:

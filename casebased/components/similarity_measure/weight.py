@@ -1,7 +1,7 @@
 from casebased.components.vocabulary import Vocabulary
 
 
-class WeightProvider():
+class WeightProvider:
     @staticmethod
     def get_weight(vocabulary: Vocabulary, attribute_key: str):
         attribute = vocabulary.find_attribute(attribute_key)

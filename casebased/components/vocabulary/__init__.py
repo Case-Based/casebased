@@ -1,7 +1,14 @@
-from .vocabulary import Vocabulary
-from .attribute import FeatureAttribute, TargetAttribute, Attribute
-from .conditions import Condition, ConditionType
+from .attribute import Attribute, FeatureAttribute, TargetAttribute
 from .case import Case
+from .conditions import Condition, ConditionType
+from .vocabulary import Vocabulary
 
-
-__all__ = ["Vocabulary", "FeatureAttribute", "TargetAttribute", "Condition", "ConditionType", "Attribute", "Case"]
+__all__ = [
+    "Vocabulary",
+    "FeatureAttribute",
+    "TargetAttribute",
+    "Condition",
+    "ConditionType",
+    "Attribute",
+    "Case",
+]

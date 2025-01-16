@@ -1,8 +1,6 @@
 from typing import Optional, Union
 
-from casebased.utils.errors import (
-    InvalidAttributeTypeError,
-)
+from casebased.utils.errors import InvalidAttributeTypeError
 
 from .conditions import Condition
 

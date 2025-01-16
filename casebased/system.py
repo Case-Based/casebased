@@ -1,13 +1,15 @@
-from casebased.components.similarity_measure import SimilaritySchema
-from casebased import CaseBaseAdapter
-from dataclasses import dataclass
-from casebased.components.vocabulary import Vocabulary, Case
 from typing import Optional
+
+from dataclasses import dataclass
+
+from casebased import CaseBaseAdapter
 from casebased.actors.retriever import Retriever
+from casebased.components.similarity_measure import SimilaritySchema
+from casebased.components.vocabulary import Case, Vocabulary
 
 
 @dataclass()
-class CaseBasedSystem():
+class CaseBasedSystem:
     similarity_schema: SimilaritySchema
     """
     In the similarity schema you can define how the similarity between cases is calculated.
@@ -34,21 +36,23 @@ class CaseBasedSystem():
     Define how many cases you want to retrieve. For now this is only a static variable you can define.
     """
     # case_base_maintainer: Optional[CaseBaseMaintainer] = None
-    
+
     def retrieve(self, case: Case):
         """
         Using the retriever function you can retrieve the k most similar cases to the given case.
         """
-        retriever = Retriever(similarity_schema=self.similarity_schema, case_base=self.case_base, k=self.k)
+        retriever = Retriever(
+            similarity_schema=self.similarity_schema, case_base=self.case_base, k=self.k
+        )
         return retriever.retrieve(case)
-    
-    def adapt(self): 
+
+    def adapt(self):
         """
         Used to adapt a previous case solution to solve the new case.
         """
         ...
-    
-    def reuse(self): 
+
+    def reuse(self):
         """
         This function will add the new case to the case base.
         """

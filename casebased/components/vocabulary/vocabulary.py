@@ -1,6 +1,8 @@
-from .attribute import FeatureAttribute, TargetAttribute
 from typing import Union
+
 from casebased.utils.errors import AttributeAlreadyExists, AttributeNotFound
+
+from .attribute import FeatureAttribute, TargetAttribute
 from .parser import Parser
 
 
