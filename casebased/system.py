@@ -1,59 +1,24 @@
-from typing import Optional
-
 from casebased.components.similarity_measure import SimilaritySchema
+from casebased import CaseBaseAdapter
+from dataclasses import dataclass
+from casebased.components.vocabulary import Vocabulary, Case
+from typing import Optional
+from casebased.actors.retriever import Retriever
 
-from .components.casebase.casebase import CaseBase
-from .components.vocabulary import Vocabulary
-from .config import Configuration
 
-
-class CaseBaseSystem:
-    """
-    Using this CaseBaseSystem class you can manage the entire CBR cycle and decide how you operate the case-base system.
-    """
-
-    configuration: Optional[Configuration]
-    """
-    With the configuration you can change the behavior of the case-base system.
-    """
+@dataclass()
+class CaseBasedSystem():
     similarity_schema: SimilaritySchema
-    case_base: CaseBase
     vocabulary: Vocabulary
-
-    def __init__(
-        self,
-        similarity_schema: Optional[SimilaritySchema],
-        configuration: Optional[Configuration],
-    ):
-        """
-        Create a case-based system with whom you can solve new cases based on a database of old cases called the case base.
-
-        Parameters:
-        ----------
-            configuration : Optional[Configuration]
-                Provide the configuration that will define which algorithms to use.
-        """
-        self.configuration = configuration or None
-        self.case_base = CaseBase()
-        self.vocabulary = Vocabulary([], [])
-        self.similarity_schema = similarity_schema
-
-    def change_config(self, config: Configuration):
-        """
-        Replace the current configuration of the case-base system with the new configuration provided.
-
-        Changing the configuration will change the behavior of the case-base system.
-        For example the time taken to measure the similarity between cases can increase or the accuracy can differ when changing the similarity measure algorithm.
-
-        Also, when changing the k-finding algorithm the amount of the nearest cases can differ as well as when a manual k is changed.
-
-        Parameters:
-        ----------
-            config: Configuration
-                Provide the configuration that will define which algorithms to use.
-
-        Returns:
-        --------
-            None
-        """
-        self.configuration = config
+    case_base: CaseBaseAdapter
+    threshold: Optional[float]
+    k: int = 5
+    # case_base_maintainer: Optional[CaseBaseMaintainer] = None
+    
+    def retrieve(self, case: Case):
+        retriever = Retriever(similarity_schema=self.similarity_schema, case_base=self.case_base, k=self.k)
+        return retriever.retrieve(case)
+    
+    def adapt(self): ...
+    
+    def reuse(self): ...

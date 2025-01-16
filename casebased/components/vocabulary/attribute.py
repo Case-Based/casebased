@@ -2,10 +2,9 @@ from typing import Optional, Union
 
 from casebased.utils.errors import (
     InvalidAttributeTypeError,
-    MissingConditionParametersError,
 )
 
-from .conditions import Condition, ConditionType
+from .conditions import Condition
 
 
 class Attribute:
@@ -23,7 +22,7 @@ class Attribute:
 
     __name: str
     __weight: Optional[float]
-    __data_type: type[int, float]
+    __data_type: type[Union[int, float]]
     __conditions: list[Condition]
     __is_target: bool
 
@@ -31,7 +30,7 @@ class Attribute:
         self,
         name: str,
         weight: Optional[float],
-        data_type: type[int, float],
+        data_type: type[Union[int, float]],
         conditions: list[Condition],
         is_target: Optional[bool],
     ):
@@ -315,7 +314,7 @@ class TargetAttribute(Attribute):
     def __init__(
         self,
         name: str,
-        data_type: type[int, float],
+        data_type: type[Union[int, float]],
         conditions: list[Condition],
     ):
         """
@@ -347,7 +346,7 @@ class FeatureAttribute(Attribute):
     def __init__(
         self,
         name: str,
-        data_type: type[int, float],
+        data_type: type[Union[int, float]],
         conditions: list[Condition],
         weight: float = 1.0,
     ):

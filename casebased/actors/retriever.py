@@ -1,26 +1,29 @@
-from casebased.components.casebase.casebase import CaseBase
-from casebased.components.casebase.query_case import QueryCase
-from casebased.components.vocabulary import Vocabulary
+from casebased.components.vocabulary import Case
+from casebased.components.similarity_measure import SimilaritySchema
+from casebased import CaseBaseAdapter
+from dataclasses import dataclass
+from typing import Mapping
 
 
+@dataclass()
 class Retriever:
-    def __init__(self, case_base, similarity_schema, vocab):
-        self.case_base: CaseBase = case_base
-        self.similarity_schema = similarity_schema
-        self.vocab: Vocabulary = vocab
+    similarity_schema: SimilaritySchema
+    case_base: CaseBaseAdapter
+    k: int
 
-    def retrieve(
-        self,
-        query: QueryCase,
-        k: int,
-        algorithm="auto",
-        weighted=False,
-        return_distance: bool = False,
-    ):
-        return self.similarity_measure.get_k_similar_cases(
-            query=query,
-            k=k,
-            algorithm="auto",
-            return_distance=return_distance,
-            weighted=weighted,
-        )
+    def retrieve(self, case: Case) -> Mapping[Case, float]:
+        cases: list[Case] = self.case_base.get_all_cases()
+        
+        k_best_cases: Mapping[Case, float] = dict()
+       
+        for prev_case in cases:
+            similarity = self.similarity_schema.calculate(case, prev_case)
+            
+            if len(k_best_cases.keys()) < self.k:
+                k_best_cases[prev_case] = similarity
+            elif len(k_best_cases.keys()) >= self.k:
+                for key, val in enumerate(k_best_cases):
+                    if val < similarity:
+                        del k_best_cases[key]
+                        k_best_cases[prev_case] = similarity
+        return k_best_cases
