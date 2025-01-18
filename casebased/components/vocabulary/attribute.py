@@ -3,55 +3,27 @@ from typing import Optional, Union
 from casebased.utils.errors import InvalidAttributeTypeError
 
 from .conditions import Condition
+from dataclasses import dataclass
 
 
+@dataclass(frozen=True)
 class Attribute:
     """
     A case consists of several attributes that define how the case is structured and which values the case can take.
     Essentially, a case is like a Python dictionary that has attributes, however these attributes are streamlined within a vocabulary to ensure data quality.
 
     Attributes:
-        __name: str : Name of the attribute that acts as a unique identifier
-        __weight: None or float : Multiplier of the attribute value. This is by default 1.0
-        __data_type: int or float : Defines the type of the value. This property is mainly used to validate values
-        __conditions: list of Conditions : Defines which values the attribute can take
-        __is_target: bool : Defines whether the attribute is a target attribute
+        name: str : Name of the attribute that acts as a unique identifier
+        weight: None or float : Multiplier of the attribute value. This is by default 1.0
+        data_type: int or float : Defines the type of the value. This property is mainly used to validate values
+        conditions: list of Conditions : Defines which values the attribute can take
+        is_target: bool : Defines whether the attribute is a target attribute
     """
-
-    __name: str
-    __weight: Optional[float]
-    __data_type: type[Union[int, float]]
-    __conditions: list[Condition]
-    __is_target: bool
-
-    def __init__(
-        self,
-        name: str,
-        weight: Optional[float],
-        data_type: type[Union[int, float]],
-        conditions: list[Condition],
-        is_target: Optional[bool],
-    ):
-        """
-        Create an Attribute instance.
-
-        Args:
-            name: str :
-                Unique identifier in case structure
-            weight: None or float :
-                Multiplier of the attribute value. Default is 1.0
-            data_type: int or float :
-                Used to validate attribute values. Can either be int or float
-            conditions: list of Condition objects :
-                Conditions that the attribute value has to meet
-            is_target: bool :
-                Defines whether the attribute is a target
-        """
-        self.__name = name
-        self.__weight = weight or 1.0
-        self.__data_type = data_type
-        self.__conditions = conditions
-        self.__is_target = is_target or False
+    name: str
+    weight: Optional[float]
+    data_type: type[Union[int, float, str, bool]]
+    conditions: list[Condition]
+    is_target: bool
 
     @staticmethod
     def from_dict(attribute_dict: dict):
@@ -75,9 +47,9 @@ class Attribute:
             attribute_dict.get("conditions") or []
         )
         return Attribute(
-            name=attribute_dict["name"],
+            name=attribute_dict.get("name"),
             weight=attribute_dict.get("weight") or 1.0,
-            data_type=float if attribute_dict.get("type") in ("float", float) else int,
+            data_type=attribute_dict.get("type") or int,
             conditions=conditions,
             is_target=(
                 True if attribute_dict.get("is_target") in (True, "true") else False
@@ -130,7 +102,7 @@ class Attribute:
             is_target=False,
         )
 
-    def validate(self, value: Union[int, float], hard_validation: bool = False):
+    def validate(self, value: Union[int, float, str, bool], hard_validation: bool = False):
         """
         Validate type and conditions for the given value.
         You can choose the validation mode by setting the hard validation argument to either True or False.
@@ -150,7 +122,7 @@ class Attribute:
             else self.__validate_type_soft(value)
         )
 
-    def validate_value(self, value: Union[int, float], hard_validation: bool = False):
+    def validate_value(self, value: Union[int, float, str, bool], hard_validation: bool = False):
         """
         Only validate the value using the conditions, not the type.
         You can choose the validation mode by setting the hard validation argument to either True or False.
@@ -166,7 +138,7 @@ class Attribute:
         """
         return self.__validate_value(value, hard_validation)
 
-    def validate_type(self, value: Union[int, float], hard_validation: bool = False):
+    def validate_type(self, value: Union[int, float, str, bool], hard_validation: bool = False):
         """
         Only validate the value's type, but not the conditions.
         You can choose the validation mode by setting the hard validation argument to either True or False.
@@ -186,7 +158,7 @@ class Attribute:
             else self.__validate_type_soft(value)
         )
 
-    def __validate_value(self, value: Union[int, float], hard_validation: bool = False):
+    def __validate_value(self, value: Union[int, float, str, bool], hard_validation: bool = False):
         """
         Only validate the value using the conditions, not the type.
         You can choose the validation mode by setting the hard validation argument to either True or False.
@@ -200,13 +172,13 @@ class Attribute:
         Returns:
             bool
         """
-        for condition in self.__conditions:
+        for condition in self.conditions:
             result: bool = condition.check_value(value, hard_validation)
             if result is False:
                 return False
         return True
 
-    def __validate_type_hard(self, value: Union[int, float]):
+    def __validate_type_hard(self, value: Union[int, float, str, bool]):
         """
         Validate the value's type by using the hard validation mode.
 
@@ -216,16 +188,16 @@ class Attribute:
         Returns:
             bool
         """
-        if isinstance(value, self.__data_type):
+        if isinstance(value, self.data_type):
             return True
         else:
             raise InvalidAttributeTypeError(
                 actual_type=type(value),
                 actual_value=value,
-                expected_type=self.__data_type,
+                expected_type=self.data_type,
             )
 
-    def __validate_type_soft(self, value: Union[int, float]):
+    def __validate_type_soft(self, value: Union[int, float, str, bool]):
         """
         Validate the value's type by using the soft validation mode.
 
@@ -235,7 +207,7 @@ class Attribute:
         Returns:
             bool
         """
-        return isinstance(value, self.__data_type)
+        return isinstance(value, self.data_type)
 
     def to_dict(self):
         """
@@ -245,65 +217,16 @@ class Attribute:
             dict
         """
         return {
-            self.__name: {
-                "weight": self.__weight,
-                "type": self.__data_type,
-                "is_target": self.__is_target,
-                "conditions": [con.to_dict() for con in self.__conditions],
+            self.name: {
+                "weight": self.weight,
+                "type": self.data_type,
+                "is_target": self.is_target,
+                "conditions": [con.to_dict() for con in self.conditions],
             }
         }
 
-    @property
-    def name(self):
-        """
-        Return the attribute name.
 
-        Returns:
-            str
-        """
-        return self.__name
-
-    @property
-    def weight(self):
-        """
-        Return the attribute weight.
-
-        Returns:
-            float
-        """
-        return self.__weight
-
-    @property
-    def data_type(self):
-        """
-        Returns the attribute data type.
-
-        Returns:
-            type
-        """
-        return self.__data_type
-
-    @property
-    def is_target(self):
-        """
-        Returns whether the attribute is a target attribute.
-
-        Returns:
-            bool
-        """
-        return self.__is_target
-
-    @property
-    def conditions(self):
-        """
-        Returns the conditions a value has to meet.
-
-        Returns:
-            list of conditions
-        """
-        return self.__conditions
-
-
+@dataclass(frozen=True)
 class TargetAttribute(Attribute):
     """
     Target attributes describe the solution of a case.
@@ -312,7 +235,7 @@ class TargetAttribute(Attribute):
     def __init__(
         self,
         name: str,
-        data_type: type[Union[int, float]],
+        data_type: type[Union[int, float, str, bool]],
         conditions: list[Condition],
     ):
         """
@@ -335,6 +258,7 @@ class TargetAttribute(Attribute):
         )
 
 
+@dataclass(frozen=True)
 class FeatureAttribute(Attribute):
     """
     Feature attributes are used to calculate the similarity between cases.
@@ -344,7 +268,7 @@ class FeatureAttribute(Attribute):
     def __init__(
         self,
         name: str,
-        data_type: type[Union[int, float]],
+        data_type: type[Union[int, float, str, bool]],
         conditions: list[Condition],
         weight: float = 1.0,
     ):

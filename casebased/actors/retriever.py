@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from casebased import CaseBaseAdapter
 from casebased.components.similarity_measure import SimilaritySchema
-from casebased.components.vocabulary import Case
+from casebased.components.vocabulary import Case, Vocabulary
 
 
 @dataclass()
@@ -25,6 +25,10 @@ class Retriever:
     k: int
     """
     How many cases should be returned.
+    """
+    vocabulary: Vocabulary
+    """
+    Vocabulary used to validate cases.
     """
 
     def get_least_similar(self, cases: Mapping[Case, float]) -> Optional[Case]:
@@ -60,6 +64,9 @@ class Retriever:
         Returns:
             A dictionary with the k most similar cases as keys and their similarity value as values.
         """
+        if self.vocabulary.validate_case(case) is False:
+            raise ValueError("Case is not valid.")
+        
         cases: list[Case] = self.case_base.get_all_cases()
 
         k_best_cases: Mapping[Case, float] = dict()

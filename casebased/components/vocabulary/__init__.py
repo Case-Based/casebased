@@ -1,5 +1,5 @@
 from .attribute import Attribute, FeatureAttribute, TargetAttribute
-from .case import Case
+from .case import Case, CaseDefinition
 from .conditions import Condition, ConditionType
 from .vocabulary import Vocabulary
 
@@ -11,4 +11,5 @@ __all__ = [
     "ConditionType",
     "Attribute",
     "Case",
+    "CaseDefinition",
 ]
