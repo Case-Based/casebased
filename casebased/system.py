@@ -41,6 +41,9 @@ class CaseBasedSystem:
         """
         Using the retriever function you can retrieve the k most similar cases to the given case.
         """
+        if self.vocabulary.validate_case(case) is False:
+            raise ValueError("Case is not valid.")
+        
         retriever = Retriever(
             similarity_schema=self.similarity_schema, case_base=self.case_base, k=self.k
         )
