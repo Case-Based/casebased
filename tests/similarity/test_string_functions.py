@@ -1,8 +1,4 @@
-from casebased.components.similarity_measure.functions import (
-    JaroDistance,
-    JaroWinkler,
-    Levenshtein,
-)
+import unittest
 
 test_cases = [
     {
@@ -17,19 +13,19 @@ test_cases = [
     },
 ]
 
-for case in test_cases:
 
-    def test_levenshtein_distance():
+class TestStringSimilarityFunctions(unittest.TestCase):
+    def test_levenshtein_distance(self):
         pass
         # dist = Levenshtein().calculate(case.get("x"), case.get("y"))
         # assert dist == case.get("results", {}).get("levenshtein")
 
-    def test_jaro_distance():
+    def test_jaro_distance(self):
         pass
         # dist = JaroDistance().calculate(case.get("x"), case.get("y"))
         # assert dist == case.get("results", {}).get("jaro")
 
-    def test_jaro_winkler_distance():
+    def test_jaro_winkler_distance(self):
         pass
         # dist = JaroWinkler(case.get("prefix_weight")).calculate(case.get("x"), case.get("y"))
         # assert dist == case.get("results", {}).get("jaro_winkler")

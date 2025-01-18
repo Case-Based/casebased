@@ -10,7 +10,7 @@ from casebased.components.similarity_measure.functions.numerical import (
     Threshold,
 )
 
-test_cases_squared_absolute = [
+TEST_CASES_SEQUARED_ABSOLUTE = [
     {
         "x": 10,
         "y": 20,
@@ -25,7 +25,7 @@ test_cases_squared_absolute = [
     },
 ]
 
-test_cases_linear_interval = [
+TEST_CASES_LINEAR_INTERVAL = [
     {"x": -2, "y": 0, "max": 100, "min": -1, "result": 0.0},
     {"x": 101, "y": 0, "max": 100, "min": -1, "result": 0.0},
     {"x": 0, "y": -2, "max": 100, "min": -1, "result": 0.0},
@@ -34,7 +34,7 @@ test_cases_linear_interval = [
     {"x": 50, "y": 32, "max": 100, "min": 0, "result": 0.82},
 ]
 
-test_cases_linear = [
+TEST_CASES_LINEAR = [
     {
         "x": 10,
         "y": 5,
@@ -65,7 +65,7 @@ test_cases_linear = [
     },
 ]
 
-test_cases_threshold = [
+TEST_CASES_THRESHOLD = [
     {
         "x": 10,
         "y": 5,
@@ -86,7 +86,7 @@ test_cases_threshold = [
     },
 ]
 
-test_cases_exponential = [
+TEST_CASES_EXPONENTIAL = [
     {
         "x": 10,
         "y": 5,
@@ -101,7 +101,7 @@ test_cases_exponential = [
     },
 ]
 
-test_cases_sigmoid = [
+TEST_CASES_SIGMOID = [
     {
         "x": 10,
         "y": 5,
@@ -114,45 +114,45 @@ test_cases_sigmoid = [
 
 class TestNumberFunctions(unittest.TestCase):
     def test_squared_distance(self):
-        for item in test_cases_squared_absolute:
+        for item in TEST_CASES_SEQUARED_ABSOLUTE:
             dist = SquaredDistance().calculate(item.get("x"), item.get("y"))
-            assert dist == item.get("squared_result")
+            self.assertEqual(dist, item.get("squared_result"))
 
     def test_absolute_distance(self):
-        for item in test_cases_squared_absolute:
+        for item in TEST_CASES_SEQUARED_ABSOLUTE:
             dist = AbsoluteDistance().calculate(item.get("x"), item.get("y"))
-            assert dist == item.get("absolute_result")
+            self.assertEqual(dist, item.get("absolute_result"))
 
     def test_linear_interval_distance(self):
-        for item in test_cases_linear_interval:
+        for item in TEST_CASES_LINEAR_INTERVAL:
             dist = LinearInterval(
                 upper_bound=item.get("max"), lower_bound=item.get("min")
             ).calculate(item.get("x"), item.get("y"))
             self.assertAlmostEqual(dist, item.get("result"), places=7)
 
     def test_linear_distance(self):
-        for item in test_cases_linear:
+        for item in TEST_CASES_LINEAR:
             dist = Linear(
                 upper_bound=item.get("max"), lower_bound=item.get("min", None)
             ).calculate(item.get("x"), item.get("y"))
-            assert dist == item.get("result")
+            self.assertEqual(dist, item.get("result"))
 
     def test_threshold_distance(self):
-        for item in test_cases_threshold:
+        for item in TEST_CASES_THRESHOLD:
             dist = Threshold(item.get("threshold")).calculate(
                 item.get("x"), item.get("y")
             )
-            assert dist == item.get("result")
+            self.assertEqual(dist, item.get("result"))
 
     def test_exponential_distance(self):
-        for item in test_cases_exponential:
+        for item in TEST_CASES_EXPONENTIAL:
             dist = Exponential(item.get("growth_value")).calculate(
                 item.get("x"), item.get("y")
             )
             self.assertAlmostEqual(dist, item.get("result"), places=7)
 
     def test_sigmoid_distance(self):
-        for item in test_cases_sigmoid:
+        for item in TEST_CASES_SIGMOID:
             dist = Sigmoid(
                 item.get("growth_value"), item.get("middle_value")
             ).calculate(item.get("x"), item.get("y"))

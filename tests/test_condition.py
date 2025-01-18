@@ -1,3 +1,5 @@
+import unittest
+
 from casebased.components.vocabulary.conditions import Condition, ConditionType
 
 TEST_CASES_CREATION = [
@@ -277,18 +279,18 @@ TEST_CASES_DICT_CONVERSION = [
 ]
 
 
-def test__condition_check_values():
-    for test in TEST_CASES_CREATION:
-        condition_dict = test["condition"]
-        cond = Condition(
-            con_type=ConditionType(condition_dict["type"]),
-            check_val=condition_dict["check_value"],
-        )
-        for case in test["tests"]:
-            assert cond.check_value(case["value"]) is case["result"]
+class TestCondition(unittest.TestCase):
+    def test__condition_check_values(self):
+        for test in TEST_CASES_CREATION:
+            condition_dict = test["condition"]
+            cond = Condition(
+                con_type=ConditionType(condition_dict["type"]),
+                check_val=condition_dict["check_value"],
+            )
+            for case in test["tests"]:
+                self.assertIs(cond.check_val(case["value"]), case["result"])
 
-
-def test__condition_as_dict():
-    for test in TEST_CASES_DICT_CONVERSION:
-        cond = test["condition"]
-        assert cond.to_dict() == test["result"]
+    def test__condition_as_dict(self):
+        for test in TEST_CASES_DICT_CONVERSION:
+            cond = test["condition"]
+            self.assertEqual(cond.to_dict(), test["result"])

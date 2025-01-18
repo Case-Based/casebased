@@ -1,5 +1,7 @@
 from typing import TypeVar
 
+import unittest
+
 from casebased.components.similarity_measure import SimilarityFunction
 
 T = TypeVar("T")
@@ -13,7 +15,7 @@ class CustomFunction(SimilarityFunction):
         return x * y * self.__growth
 
 
-test_cases = [
+TEST_CASES = [
     {
         "x": 20,
         "y": 12.134,
@@ -23,9 +25,10 @@ test_cases = [
 ]
 
 
-def test_custom_distance_function():
-    for case in test_cases:
-        dist = CustomFunction(case.get("growth")).calculate(
-            case.get("x"), case.get("y")
-        )
-        assert dist == case.get("result")
+class TestCustomSimilarityFunction(unittest.TestCase):
+    def test_custom_distance_function(self):
+        for case in TEST_CASES:
+            dist = CustomFunction(case.get("growth")).calculate(
+                case.get("x"), case.get("y")
+            )
+            self.assertEqual(dist, case.get("result"))
