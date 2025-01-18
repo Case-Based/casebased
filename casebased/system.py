@@ -1,8 +1,9 @@
-from typing import Optional
+from typing import Mapping, Optional, Union
 
 from dataclasses import dataclass
 
 from casebased import CaseBaseAdapter
+from casebased.actors.adapter import Adapter
 from casebased.actors.retriever import Retriever
 from casebased.components.similarity_measure import SimilaritySchema
 from casebased.components.vocabulary import Case, Vocabulary
@@ -35,6 +36,10 @@ class CaseBasedSystem:
     """
     Define how many cases you want to retrieve. For now this is only a static variable you can define.
     """
+    adapter: Adapter
+    """
+    Used to adapt previous solutions to the new case.
+    """
     # case_base_maintainer: Optional[CaseBaseMaintainer] = None
 
     def retrieve(self, case: Case):
@@ -49,11 +54,13 @@ class CaseBasedSystem:
         )
         return retriever.retrieve(case)
 
-    def adapt(self):
+    def adapt(
+        self, case: Case, similar_cases: Union[list[Case], Mapping[Case, float]]
+    ) -> Case:
         """
         Used to adapt a previous case solution to solve the new case.
         """
-        ...
+        return self.adapter.adapt(case, similar_cases)
 
     def reuse(self):
         """
