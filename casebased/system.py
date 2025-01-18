@@ -43,7 +43,7 @@ class CaseBasedSystem:
         """
         if self.vocabulary.validate_case(case) is False:
             raise ValueError("Case is not valid.")
-        
+
         retriever = Retriever(
             similarity_schema=self.similarity_schema, case_base=self.case_base, k=self.k
         )

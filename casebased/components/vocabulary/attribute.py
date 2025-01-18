@@ -1,9 +1,10 @@
 from typing import Optional, Union
 
+from dataclasses import dataclass
+
 from casebased.utils.errors import InvalidAttributeTypeError
 
 from .conditions import Condition
-from dataclasses import dataclass
 
 
 @dataclass(frozen=True)
@@ -19,6 +20,7 @@ class Attribute:
         conditions: list of Conditions : Defines which values the attribute can take
         is_target: bool : Defines whether the attribute is a target attribute
     """
+
     name: str
     weight: Optional[float]
     data_type: type[Union[int, float, str, bool]]
@@ -102,7 +104,9 @@ class Attribute:
             is_target=False,
         )
 
-    def validate(self, value: Union[int, float, str, bool], hard_validation: bool = False):
+    def validate(
+        self, value: Union[int, float, str, bool], hard_validation: bool = False
+    ):
         """
         Validate type and conditions for the given value.
         You can choose the validation mode by setting the hard validation argument to either True or False.
@@ -122,7 +126,9 @@ class Attribute:
             else self.__validate_type_soft(value)
         )
 
-    def validate_value(self, value: Union[int, float, str, bool], hard_validation: bool = False):
+    def validate_value(
+        self, value: Union[int, float, str, bool], hard_validation: bool = False
+    ):
         """
         Only validate the value using the conditions, not the type.
         You can choose the validation mode by setting the hard validation argument to either True or False.
@@ -138,7 +144,9 @@ class Attribute:
         """
         return self.__validate_value(value, hard_validation)
 
-    def validate_type(self, value: Union[int, float, str, bool], hard_validation: bool = False):
+    def validate_type(
+        self, value: Union[int, float, str, bool], hard_validation: bool = False
+    ):
         """
         Only validate the value's type, but not the conditions.
         You can choose the validation mode by setting the hard validation argument to either True or False.
@@ -158,7 +166,9 @@ class Attribute:
             else self.__validate_type_soft(value)
         )
 
-    def __validate_value(self, value: Union[int, float, str, bool], hard_validation: bool = False):
+    def __validate_value(
+        self, value: Union[int, float, str, bool], hard_validation: bool = False
+    ):
         """
         Only validate the value using the conditions, not the type.
         You can choose the validation mode by setting the hard validation argument to either True or False.

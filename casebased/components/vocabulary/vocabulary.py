@@ -3,8 +3,8 @@ from typing import Union
 from casebased.utils.errors import AttributeAlreadyExists, AttributeNotFound
 
 from .attribute import FeatureAttribute, TargetAttribute
-from .parser import Parser
 from .case import Case
+from .parser import Parser
 
 
 class Vocabulary:
@@ -98,10 +98,10 @@ class Vocabulary:
             if attr.name == key:
                 return attr
         return None
-    
+
     def validate_case(self, case: Case) -> bool:
         """
-        Validate a case by checking whether all attributes are given 
+        Validate a case by checking whether all attributes are given
         and whether the defined data type and conditions are met.
 
         Args:
@@ -115,7 +115,7 @@ class Vocabulary:
         success = self.__validate_completeness(case)
         success = self.__validate_attributes(case)
         return success
-    
+
     def __validate_completeness(self, case: Case) -> bool:
         """
         Validate a case by checking if all feature and target attributes are present.
@@ -134,14 +134,14 @@ class Vocabulary:
             if target.name not in case.keys():
                 return False
         return True
-    
+
     def __validate_attributes(self, case: Case) -> bool:
         """
         Validate a case by checking if all attributes meet the defined conditions and data type.
-        
+
         Args:
             case: Case : Case to be checked
-            
+
         Returns:
             bool
         """
@@ -152,7 +152,7 @@ class Vocabulary:
                 success = attr_definition and attr_definition.validate(value)
             else:
                 break
-        
+
         if success:
             for key, value in case.target_attributes:
                 if success and not isinstance(value, None):
@@ -160,7 +160,7 @@ class Vocabulary:
                     success = attr_definition and attr_definition.validate(value)
                 else:
                     break
-                    
+
         return success
 
     @property
