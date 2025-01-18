@@ -9,7 +9,7 @@ from casebased.components.similarity_measure import SimilaritySchema
 from casebased.components.vocabulary import Case, Vocabulary
 
 
-@dataclass()
+@dataclass(frozen=True)
 class CaseBasedSystem:
     similarity_schema: SimilaritySchema
     """
@@ -62,8 +62,10 @@ class CaseBasedSystem:
         """
         return self.adapter.adapt(case, similar_cases)
 
-    def reuse(self):
+    def reuse(self, case: Case) -> None:
         """
         This function will add the new case to the case base.
         """
-        ...
+        result = self.case_base.create_case(case)
+        if not isinstance(result, None) and result is False:
+            raise RuntimeError("Case creation task faile")
