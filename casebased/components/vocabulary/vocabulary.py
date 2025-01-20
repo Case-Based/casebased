@@ -4,7 +4,6 @@ from casebased.utils.errors import AttributeAlreadyExists, AttributeNotFound
 
 from .attribute import FeatureAttribute, TargetAttribute
 from .case import Case
-from .parser import Parser
 
 
 class Vocabulary:
@@ -62,16 +61,6 @@ class Vocabulary:
             self.__features = [item for item in self.__features if item.name != key]
         else:
             self.__targets = [item for item in self.__targets if item.name != key]
-
-    def save(self, file_path: str):
-        """
-        Save the current vocabulary state into a TOML file.
-
-        Args:
-            file_path: str :
-                Define where the vocabulary should be stored
-        """
-        Parser.generate_toml_file(self, file_path)
 
     def to_dict(self):
         """
