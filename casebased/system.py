@@ -1,61 +1,71 @@
-from typing import Optional
+from typing import Mapping, Optional, Union
 
-from .components.casebase.casebase import CaseBase
-from .components.similarity_measure.similarity import SimilarityMeasure
-from .components.vocabulary import Vocabulary
-from .config import Configuration
+from dataclasses import dataclass
+
+from casebased import CaseBaseAdapter
+from casebased.actors.adapter import Adapter
+from casebased.actors.retriever import Retriever
+from casebased.components.similarity_measure import SimilaritySchema
+from casebased.components.vocabulary import Case, Vocabulary
 
 
-class CaseBaseSystem:
+@dataclass(frozen=True)
+class CaseBasedSystem:
+    similarity_schema: SimilaritySchema
     """
-    Using this CaseBaseSystem class you can manage the entire CBR cycle and decide how you operate the case-base system.
+    In the similarity schema you can define how the similarity between cases is calculated.
+    Within the schema you can define the calculation function for every attribute of the case.
+    Additionally, each attribute can have a weight, which is defined in the case base's vocabulary.
     """
-
-    configuration: Optional[Configuration]
-    """
-    With the configuration you can change the behavior of the case-base system.
-    """
-    similarity_measure: SimilarityMeasure
-    case_base: CaseBase
     vocabulary: Vocabulary
+    """
+    The vocabulary serves as a definition for the cases in CBR. You can define attributes, their values, conditions they have to meet, and their weights.
+    This can currently be done through a TOML file. More information can be found in the vocabulary documentation section.
+    """
+    case_base: CaseBaseAdapter
+    """
+    The case base is the storage for all cases in the CBR system. It can be implemented in different ways, e.g. as a list, a database, or a file.
+    Since we're not in position to define which technologies you have to use, we provide you an interface to implement your own case base.
+    For this you have to implement the CaseBaseAdapter with its basic functions (not much more than CRUD).
+    """
+    threshold: Optional[float]
+    """
+    Using the threshold you can define your quality standard. If the similarity is above this theshold the case is cut out because it's not similar enough.
+    """
+    adapter: Adapter
+    """
+    Used to adapt previous solutions to the new case.
+    """
+    k: int = 5
+    """
+    Define how many cases you want to retrieve. For now this is only a static variable you can define.
+    """
+    # case_base_maintainer: Optional[CaseBaseMaintainer] = None
 
-    def __init__(self, configuration=None):
+    def retrieve(self, case: Case):
         """
-        Create a case-based system with whom you can solve new cases based on a database of old cases called the case base.
-
-        Parameters:
-        ----------
-            configuration : Optional[Configuration]
-                Provide the configuration that will define which algorithms to use.
+        Using the retriever function you can retrieve the k most similar cases to the given case.
         """
-        self.configuration = configuration
-        self.case_base = CaseBase()
-        self.vocabulary = Vocabulary([], [])
-        if self.configuration is None:
-            self.similarity_measure = SimilarityMeasure(Configuration())
-        else:
-            self.similarity_measure = SimilarityMeasure(self.configuration)
+        if self.vocabulary.validate_case(case) is False:
+            raise ValueError("Case is not valid.")
 
-    def change_config(self, config: Configuration):
+        retriever = Retriever(
+            similarity_schema=self.similarity_schema, case_base=self.case_base, k=self.k
+        )
+        return retriever.retrieve(case)
+
+    def adapt(
+        self, case: Case, similar_cases: Union[list[Case], Mapping[Case, float]]
+    ) -> Case:
         """
-        Replace the current configuration of the case-base system with the new configuration provided.
-
-        Changing the configuration will change the behavior of the case-base system.
-        For example the time taken to measure the similarity between cases can increase or the accuracy can differ when changing the similarity measure algorithm.
-
-        Also, when changing the k-finding algorithm the amount of the nearest cases can differ as well as when a manual k is changed.
-
-        Parameters:
-        ----------
-            config: Configuration
-                Provide the configuration that will define which algorithms to use.
-
-        Returns:
-        --------
-            None
+        Used to adapt a previous case solution to solve the new case.
         """
-        self.configuration = config
-        if self.configuration is None:
-            self.similarity_measure = SimilarityMeasure(Configuration())
-        else:
-            self.similarity_measure = SimilarityMeasure(self.configuration)
+        return self.adapter.adapt(case, similar_cases)
+
+    def reuse(self, case: Case) -> None:
+        """
+        This function will add the new case to the case base.
+        """
+        result = self.case_base.create_case(case)
+        if not isinstance(result, None) and result is False:
+            raise RuntimeError("Case creation task faile")

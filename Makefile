@@ -40,10 +40,9 @@ formatting: codestyle
 #* Linting
 .PHONY: test
 test:
-	PYTHONPATH=$(PYTHONPATH) poetry run pytest --cov=casebased/ tests/
-	PYTHONPATH=$(PYTHONPATH) poetry run coverage report
-	PYTHONPATH=$(PYTHONPATH) poetry run coverage xml
-	poetry run coverage-badge -o assets/images/coverage.svg -f
+	PYTHONPATH=$(PYTHONPATH) poetry run python3 -m unittest discover -v tests/
+	PYTHONPATH=$(PYTHONPATH) poetry run coverage run -m unittest discover -v tests/
+	PYTHONPATH=$(PYTHONPATH) poetry run coverage-badge -o assets/images/coverage.svg -f
 
 .PHONY: check-codestyle
 check-codestyle:

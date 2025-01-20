@@ -2,8 +2,6 @@ from pathlib import Path
 
 import pandas as pd
 
-from casebased.components import constants
-
 # TODO Room for improvements
 """
 Some potential improvements or considerations:

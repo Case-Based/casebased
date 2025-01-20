@@ -1,6 +1,7 @@
-from enum import Enum
+from typing import Protocol, TypeVar
+
+T = TypeVar("T")
 
 
-class SimilarityMeasureAlgorithm(Enum):
-    EUCLIDEAN = (0,)
-    MANHATTAN = (1,)
+class SimilarityFunction(Protocol):
+    def calculate(self, x: T, y: T) -> float: ...

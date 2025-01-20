@@ -1,11 +1,11 @@
-import pytest
+import unittest
+
 from casebased.components.vocabulary.attribute import (
     Attribute,
     FeatureAttribute,
     TargetAttribute,
 )
 from casebased.components.vocabulary.conditions import Condition, ConditionType
-
 from casebased.utils.errors import InvalidAttributeTypeError, InvalidAttributeValueError
 
 ATTRIBUTE_FROM_DICT_TEST_PROPS = [
@@ -316,108 +316,112 @@ TEST_CASES_CHECK_ALL = [
 ]
 
 
-def test__target_attribute_creation():
-    attr = TargetAttribute(
-        name="Test attribute",
-        conditions=[],
-        data_type=int,
-    )
-    assert attr is not None
-    assert attr.is_target is True
-    assert attr.weight == 1.0
-    assert attr.name == "Test attribute"
-    assert attr.data_type is int
-    assert len(attr.conditions) == 0
+class TestAttribute(unittest.TestCase):
+    def test__target_attribute_creation(self):
+        attr = TargetAttribute(
+            name="Test attribute",
+            conditions=[],
+            data_type=int,
+        )
 
+        self.assertIsNotNone(attr)
+        self.assertIs(attr.is_target, True)
+        self.assertEqual(attr.weight, 1.0)
+        self.assertEqual(attr.name, "Test attribute")
+        self.assertIs(attr.data_type, int)
+        self.assertEqual(len(attr.conditions), 0)
 
-def test__feature_attribute_creation():
-    attr = FeatureAttribute(
-        name="Feature attr",
-        conditions=[],
-        data_type=float,
-        weight=10.0,
-    )
-    assert attr is not None
-    assert attr.name == "Feature attr"
-    assert attr.weight == 10.0
-    assert attr.is_target is False
-    assert attr.data_type is float
-    assert len(attr.conditions) == 0
+    def test__feature_attribute_creation(self):
+        attr = FeatureAttribute(
+            name="Feature attr",
+            conditions=[],
+            data_type=float,
+            weight=10.0,
+        )
 
+        self.assertIsNotNone(attr)
+        self.assertIs(attr.is_target, False)
+        self.assertEqual(attr.weight, 10.0)
+        self.assertEqual(attr.name, "Feature attr")
+        self.assertIs(attr.data_type, float)
+        self.assertEqual(len(attr.conditions), 0)
 
-def test__attribute_from_dict():
-    for test in ATTRIBUTE_FROM_DICT_TEST_PROPS:
-        attr_dict = test["test_props"]
-        expected_values = test["expected_result"]
-        attr = Attribute.from_dict(attr_dict)
-        assert isinstance(attr, expected_values["attr_type"])
-        assert attr.name == attr_dict["name"]
-        assert attr.weight == attr_dict["weight"]
-        assert attr.data_type is attr_dict["type"]
-        assert attr.is_target is attr_dict["is_target"]
-        assert len(attr.conditions) == expected_values["condition_length"]
-        for i in range(len(attr.conditions)):
-            actual_attr = attr.conditions[i]
-            expected_attr = expected_values["conditions"][i]
-            assert actual_attr.con_type == expected_attr.con_type
-            assert actual_attr.check_val == expected_attr.check_val
+    def test__attribute_from_dict(self):
+        for test in ATTRIBUTE_FROM_DICT_TEST_PROPS:
+            attr_dict = test["test_props"]
+            expected_values = test["expected_result"]
+            attr = Attribute.from_dict(attr_dict)
 
+            self.assertIsInstance(attr, expected_values["attr_type"])
+            self.assertEqual(attr.name, attr_dict["name"])
+            self.assertEqual(attr.weight, attr_dict["weight"])
+            self.assertIs(attr.data_type, attr_dict["type"])
+            self.assertIs(attr.is_target, attr_dict["is_target"])
+            self.assertEqual(len(attr.conditions), expected_values["condition_length"])
 
-def test__attribute_from_str_name():
-    name = "age"
-    attr = Attribute.from_name_string(name)
-    assert attr is not None
-    assert attr.name == name
-    assert attr.weight == 1.0
-    assert attr.data_type is int
-    assert attr.is_target is False
-    assert len(attr.conditions) == 0
+            for i in range(len(attr.conditions)):
+                actual_attr = attr.conditions[i]
+                expected_attr = expected_values["conditions"][i]
 
+                self.assertEqual(actual_attr.con_type, expected_attr.con_type)
+                self.assertEqual(actual_attr.check_val, expected_attr.check_val)
 
-def test__validate_value_soft():
-    for test in TEST_CASES_CHECK_VALUES:
-        attr = test["condition"]
-        for case in test["expected_soft"]:
-            assert attr.validate_value(case["value"]) is case["expected_result"]
+    def test__attribute_from_str_name(self):
+        name = "age"
+        attr = Attribute.from_name_string(name)
 
+        self.assertIsNotNone(attr)
+        self.assertEqual(attr.name, name)
+        self.assertEqual(attr.weight, 1.0)
+        self.assertIs(attr.data_type, int)
+        self.assertIs(attr.is_target, False)
+        self.assertEqual(len(attr.conditions), 0)
 
-def test__validate_value_hard():
-    for test in TEST_CASES_CHECK_VALUES:
-        attr = test["condition"]
-        for case in test["expected_hard"]:
-            with pytest.raises(case["expected_exception"]) as err:
-                attr.validate(case["value"], True)
-            assert err.value.args[0] == case["expected_message"]
+    def test__validate_value_soft(self):
+        for test in TEST_CASES_CHECK_VALUES:
+            attr = test["condition"]
 
+            for case in test["expected_soft"]:
+                self.assertIs(
+                    attr.validate_value(case["value"]), case["expected_result"]
+                )
 
-def test__validate_type_soft():
-    for test in TEST_CASES_CHECK_TYPE:
-        attr = test["condition"]
-        for case in test["expected_soft"]:
-            assert attr.validate_type(case["value"], False) is case["expected_type"]
+    def test__validate_value_hard(self):
+        for test in TEST_CASES_CHECK_VALUES:
+            attr = test["condition"]
+            for case in test["expected_hard"]:
+                with self.assertRaises(case["expected_exception"]) as err:
+                    attr.validate(case["value"], True)
+                self.assertEqual(str(err.exception), case["expected_message"])
 
+    def test__validate_type_soft(self):
+        for test in TEST_CASES_CHECK_TYPE:
+            attr = test["condition"]
+            for case in test["expected_soft"]:
+                self.assertIs(
+                    attr.validate_type(case["value"], False), case["expected_type"]
+                )
 
-def test__validate_type_hard():
-    for test in TEST_CASES_CHECK_TYPE:
-        attr = test["condition"]
-        for case in test["expected_hard"]:
-            with pytest.raises(case["expected_exception"]) as err:
-                attr.validate_type(case["value"], True)
-            assert err.value.args[0] == case["expected_message"]
+    def test__validate_type_hard(self):
+        for test in TEST_CASES_CHECK_TYPE:
+            attr = test["condition"]
+            for case in test["expected_hard"]:
+                with self.assertRaises(case["expected_exception"]) as err:
+                    attr.validate_type(case["value"], True)
+                self.assertEqual(str(err.exception), case["expected_message"])
 
+    def test__validate_all_soft(self):
+        for test in TEST_CASES_CHECK_ALL:
+            attr = test["attribute"]
+            for case in test["expected_soft"]:
+                self.assertIs(
+                    attr.validate(case["value"], False), case["expected_output"]
+                )
 
-def test__validate_all_soft():
-    for test in TEST_CASES_CHECK_ALL:
-        attr = test["attribute"]
-        for case in test["expected_soft"]:
-            print(f'res {attr.validate(case["value"], False)}')
-            assert attr.validate(case["value"], False) is case["expected_output"]
-
-
-def test__validate_all_hard():
-    for test in TEST_CASES_CHECK_ALL:
-        attr = test["attribute"]
-        for case in test["expected_hard"]:
-            with pytest.raises(case["expected_exception"]) as err:
-                attr.validate(case["value"], True)
-            assert err.value.args[0] == case["expected_message"]
+    def test__validate_all_hard(self):
+        for test in TEST_CASES_CHECK_ALL:
+            attr = test["attribute"]
+            for case in test["expected_hard"]:
+                with self.assertRaises(case["expected_exception"]) as err:
+                    attr.validate(case["value"], True)
+                self.assertEqual(str(err.exception), case["expected_message"])
