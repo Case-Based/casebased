@@ -1,12 +1,11 @@
-import tempfile
+import unittest
 from pathlib import Path
 
 import pandas as pd
 import pandas.testing as pd_testing
-import pytest
-from casebased.components.casebase.casebase import CaseBase
-from casebased.components.constants import CBTypes
 from pandas._typing import FilePath
+
+from casebased.components.casebase.casebase import CaseBase
 
 
 def read_csv_to_pd(file_path: FilePath) -> pd.DataFrame:
@@ -20,7 +19,7 @@ def read_csv_to_pd(file_path: FilePath) -> pd.DataFrame:
     return pd.read_csv(file_path)
 
 
-class TestCaseBase:
+class TestCaseBase(unittest.TestCase):
     """
     Tests for case base + case base maintainer.
     """
@@ -715,8 +714,9 @@ class TestCaseBase:
 
         test_case_base = None
 
-        with pytest.raises(ValueError, match="Case base cannot be None"):
-            case_base_instance = CaseBase(cases=test_case_base)
+        with self.assertRaises(ValueError) as err:
+            CaseBase(cases=test_case_base)
+        self.assertEqual(str(err.exception), "Case base cannot be None")
 
     # def test_clean_up_case_base(self):
 

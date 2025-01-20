@@ -6,7 +6,6 @@ from casebased.components.vocabulary.attribute import (
     TargetAttribute,
 )
 from casebased.components.vocabulary.conditions import Condition, ConditionType
-
 from casebased.utils.errors import InvalidAttributeTypeError, InvalidAttributeValueError
 
 ATTRIBUTE_FROM_DICT_TEST_PROPS = [
