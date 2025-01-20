@@ -10,14 +10,14 @@ description = "CaseBased is a python library that implements the priciples of ca
 readme = "README.md"
 authors = ["casebased <casebased@gmail.com>"]
 license = "MIT"
-repository = "https://github.com/casebased/casebased"
-homepage = "https://github.com/casebased/casebased"
+repository = "https://github.com/Case-Based/casebased"
+homepage = "https://www.casebased.org/"
 
 # Keywords description https://python-poetry.org/docs/pyproject/#keywords
-keywords = []  #! Update me
+keywords = ["CBR", "case-based reasoning", "ML", "Machine Learning"]
 
 # Pypi classifiers: https://pypi.org/classifiers/
-classifiers = [  #! Update me
+classifiers = [
   "Development Status :: 3 - Alpha",
   "Intended Audience :: Developers",
   "Operating System :: OS Independent",
@@ -34,11 +34,9 @@ python = "^3.9"
 numpy = "^1.9.0"
 pandas = "^2.2.2"
 scikit-learn = "^1.5.1"
-langchain = "^0.3.0"
-ollama = "^0.3.3"
 toml = "^0.10.2"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 bandit = "^1.7.1"
 black = {version = "^24.3.0", allow-prereleases = true}
 darglint = "^1.8.1"
@@ -48,13 +46,10 @@ mypy-extensions = "^0.4.3"
 pre-commit = "^2.15.0"
 pydocstyle = "^6.1.1"
 pylint = "^2.11.1"
-pytest = "^6.2.5"
 pyupgrade = "^2.29.1"
 safety = "^1.10.3"
 coverage = "^6.1.2"
 coverage-badge = "^1.1.0"
-pytest-html = "^3.1.1"
-pytest-cov = "^3.0.0"
 
 [tool.black]
 # https://github.com/psf/black
