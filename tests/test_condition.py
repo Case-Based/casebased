@@ -288,7 +288,7 @@ class TestCondition(unittest.TestCase):
                 check_val=condition_dict["check_value"],
             )
             for case in test["tests"]:
-                self.assertIs(cond.check_val(case["value"]), case["result"])
+                self.assertIs(cond.check_value(case["value"]), case["result"])
 
     def test__condition_as_dict(self):
         for test in TEST_CASES_DICT_CONVERSION:

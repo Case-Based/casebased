@@ -357,7 +357,7 @@ class TestAttribute(unittest.TestCase):
             self.assertEqual(attr.weight, attr_dict["weight"])
             self.assertIs(attr.data_type, attr_dict["type"])
             self.assertIs(attr.is_target, attr_dict["is_target"])
-            self.assertEqual(len(attr.conditions), attr_dict["condition_length"])
+            self.assertEqual(len(attr.conditions), expected_values["condition_length"])
 
             for i in range(len(attr.conditions)):
                 actual_attr = attr.conditions[i]
@@ -392,7 +392,7 @@ class TestAttribute(unittest.TestCase):
             for case in test["expected_hard"]:
                 with self.assertRaises(case["expected_exception"]) as err:
                     attr.validate(case["value"], True)
-                self.assertEqual(err.msg, case["expected_message"])
+                self.assertEqual(str(err.exception), case["expected_message"])
 
     def test__validate_type_soft(self):
         for test in TEST_CASES_CHECK_TYPE:
@@ -408,7 +408,7 @@ class TestAttribute(unittest.TestCase):
             for case in test["expected_hard"]:
                 with self.assertRaises(case["expected_exception"]) as err:
                     attr.validate_type(case["value"], True)
-                self.assertEqual(err.msg, case["expected_message"])
+                self.assertEqual(str(err.exception), case["expected_message"])
 
     def test__validate_all_soft(self):
         for test in TEST_CASES_CHECK_ALL:
@@ -424,4 +424,4 @@ class TestAttribute(unittest.TestCase):
             for case in test["expected_hard"]:
                 with self.assertRaises(case["expected_exception"]) as err:
                     attr.validate(case["value"], True)
-                self.assertEqual(err.msg, case["expected_message"])
+                self.assertEqual(str(err.exception), case["expected_message"])

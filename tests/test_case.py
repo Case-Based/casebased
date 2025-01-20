@@ -25,8 +25,8 @@ class TestQueryCase(unittest.TestCase):
 
     def test_get_1d_feature_array(self):
         feat_arr_1d = self.case.get_1d_feature_array()
-        self.assertEqual(feat_arr_1d, [1, 2, 3])
+        self.assertEqual(feat_arr_1d.tolist(), [1, 2, 3])
 
     def test_get_2d_feature_array(self):
         feat_arr_2d = self.case.get_2d_feature_array()
-        self.assertEqual(feat_arr_2d, [[1, 2, 3]])
+        self.assertEqual(feat_arr_2d.tolist(), [[1, 2, 3]])

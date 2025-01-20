@@ -1,5 +1,7 @@
 import toml
 
+from casebased.utils.convert import convert_string_to_type
+
 from .attribute import Attribute
 from .vocabulary import Vocabulary
 
@@ -44,11 +46,12 @@ class Parser:
         target_attributes = []
         feature_attributes = []
         for key, val in raw_vocab.items():
+            converted_type = convert_string_to_type(val.get("type"))
             raw_attr = {
                 "name": key,
                 "weight": val.get("weight"),
                 "conditions": val.get("conditions"),
-                "type": val.get("type"),
+                "type": converted_type or int,
                 "is_target": val.get("is_target"),
             }
             attr = Attribute.from_dict(raw_attr)

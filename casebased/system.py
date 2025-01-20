@@ -32,13 +32,13 @@ class CaseBasedSystem:
     """
     Using the threshold you can define your quality standard. If the similarity is above this theshold the case is cut out because it's not similar enough.
     """
-    k: int = 5
-    """
-    Define how many cases you want to retrieve. For now this is only a static variable you can define.
-    """
     adapter: Adapter
     """
     Used to adapt previous solutions to the new case.
+    """
+    k: int = 5
+    """
+    Define how many cases you want to retrieve. For now this is only a static variable you can define.
     """
     # case_base_maintainer: Optional[CaseBaseMaintainer] = None
 
