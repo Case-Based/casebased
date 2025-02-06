@@ -128,6 +128,9 @@ addopts = [
   "--doctest-continue-on-failure",
 ]
 
+[tool.commitizen]
+gpg_sign = true
+
 [tool.coverage.run]
 source = ["tests"]
 
