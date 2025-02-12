@@ -13,6 +13,9 @@ license = "MIT"
 repository = "https://github.com/Case-Based/casebased"
 homepage = "https://www.casebased.org/"
 
+[tool.poetry.requires-plugins]
+poetry-plugin-export = ">=1.8"
+
 # Keywords description https://python-poetry.org/docs/pyproject/#keywords
 keywords = ["CBR", "case-based reasoning", "ML", "Machine Learning"]
 
