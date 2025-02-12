@@ -1,25 +1,23 @@
 # Poetry pyproject.toml: https://python-poetry.org/docs/pyproject/
 [build-system]
-requires = ["poetry_core>=1.0.0"]
+requires = ["poetry_core@latest"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.poetry]
+[project]
 name = "casebased"
 version = "0.1.0"
 description = "CaseBased is a python library that implements the priciples of case-based reasoning."
 readme = "README.md"
-authors = ["casebased <casebased@gmail.com>"]
-license = "MIT"
-repository = "https://github.com/Case-Based/casebased"
-homepage = "https://www.casebased.org/"
-
-[tool.poetry.requires-plugins]
-poetry-plugin-export = ">=1.8"
-
-# Keywords description https://python-poetry.org/docs/pyproject/#keywords
+authors = [
+  {name = "Jonas Liendl", email = "casebased@gmail.com"},
+  {name = "Lukas Klockenhoff", email = "casebased@gmail.com"},
+  {name = "Jannek Kloettschen", email = "casebased@gmail.com"}
+]
+license = {file = "LICENSE"}
+urls = {repository = "https://github.com/Case-Based/casebased", homepage = "https://www.casebased.org/"}
+requires-python = "^3.9"
+dynamic = ["dependencies"]
 keywords = ["CBR", "case-based reasoning", "ML", "Machine Learning"]
-
-# Pypi classifiers: https://pypi.org/classifiers/
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Intended Audience :: Developers",
@@ -30,9 +28,13 @@ classifiers = [
   "Programming Language :: Python :: 3.9",
 ]
 
+[tool.poetry]
+package-mode = true
 
+[tool.poetry.requires-plugins]
+poetry-plugin-export = ">=1.8"
 
-[tool.poetry.dependencies]
+[tool.poertry.dependencies]
 python = "^3.9"
 numpy = "^1.9.0"
 pandas = "^2.2.2"
@@ -92,7 +94,7 @@ color_output = true
 
 [tool.mypy]
 # https://mypy.readthedocs.io/en/latest/config_file.html#using-a-pyproject-toml-file
-python_version = 3.9
+python_version = "3.9"
 pretty = true
 show_traceback = true
 color_output = true
@@ -137,12 +139,12 @@ gpg_sign = true
 [tool.coverage.run]
 source = ["tests"]
 
-[coverage.paths]
-source = "casebased"
+# [coverage.paths]
+# source = "casebased"
 
-[coverage.run]
-branch = true
+# [coverage.run]
+# branch = true
 
-[coverage.report]
-fail_under = 50
-show_missing = true
+# [coverage.report]
+# fail_under = 50
+# show_missing = true
