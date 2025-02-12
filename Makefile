@@ -21,7 +21,7 @@ poetry-remove:
 install:
 	poetry lock
 	poetry install
-	poetry export --without-hashes > requirements.txt
+	poetry export -f requirements.txt -o requirements.txt --with tests # Export dependencies used for tests to requirements.txt, so test run properly
 	# -poetry run mypy --install-types --non-interactive ./
 
 .PHONY: pre-commit-install
