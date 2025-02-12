@@ -28,11 +28,11 @@ classifiers = [
   "Programming Language :: Python :: 3.9",
 ]
 
-[tool.poetry]
-package-mode = true
-
 [tool.poetry.requires-plugins]
 poetry-plugin-export = ">=1.8"
+
+[tool.poetry]
+package-mode = true
 
 [tool.poertry.dependencies]
 python = "^3.9"
@@ -138,13 +138,11 @@ gpg_sign = true
 
 [tool.coverage.run]
 source = ["tests"]
+branch = true
 
-# [coverage.paths]
-# source = "casebased"
+[tool.coverage.paths]
+source = ["casebased"]
 
-# [coverage.run]
-# branch = true
-
-# [coverage.report]
-# fail_under = 50
-# show_missing = true
+[tool.coverage.report]
+fail_under = 50
+show_missing = true
