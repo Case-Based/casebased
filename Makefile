@@ -20,7 +20,7 @@ poetry-remove:
 .PHONY: install
 install:
 	poetry lock
-	poetry export --without-hashes > requirements.txt
+	# poetry export --without-hashes > requirements.txt
 	poetry install
 	# -poetry run mypy --install-types --non-interactive ./
 
