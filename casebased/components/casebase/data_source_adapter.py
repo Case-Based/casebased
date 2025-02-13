@@ -5,7 +5,6 @@ import os
 from pathlib import Path
 
 import pandas as pd
-
 from casebased.components.casebase.casebase import CaseBase
 
 

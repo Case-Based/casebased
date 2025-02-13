@@ -1,7 +1,6 @@
 import os
 
 import pandas as pd
-
 from casebased.components.casebase.casebase import CaseBase
 from casebased.components.casebase.data_source_adapter import DataSourceAdapter
 

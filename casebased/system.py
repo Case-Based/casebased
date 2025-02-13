@@ -2,11 +2,12 @@ from typing import Mapping, Optional, Union
 
 from dataclasses import dataclass
 
+from casebased.components.similarity_measure import SimilaritySchema
+from casebased.components.vocabulary import Case, Vocabulary
+
 from casebased import CaseBaseAdapter
 from casebased.actors.adapter import Adapter
 from casebased.actors.retriever import Retriever
-from casebased.components.similarity_measure import SimilaritySchema
-from casebased.components.vocabulary import Case, Vocabulary
 
 
 @dataclass(frozen=True)

@@ -2,9 +2,10 @@ from typing import Mapping, Optional
 
 from dataclasses import dataclass
 
-from casebased import CaseBaseAdapter
 from casebased.components.similarity_measure import SimilaritySchema
 from casebased.components.vocabulary import Case, Vocabulary
+
+from casebased import CaseBaseAdapter
 
 
 @dataclass()

@@ -3,9 +3,8 @@ from pathlib import Path
 
 import pandas as pd
 import pandas.testing as pd_testing
-from pandas._typing import FilePath
-
 from casebased.components.casebase.casebase import CaseBase
+from pandas._typing import FilePath
 
 
 def read_csv_to_pd(file_path: FilePath) -> pd.DataFrame:

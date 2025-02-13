@@ -1,5 +1,4 @@
 import toml
-
 from casebased.utils.convert import convert_string_to_type
 
 from .attribute import Attribute
