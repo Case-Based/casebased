@@ -5,7 +5,7 @@ build-backend = "poetry.core.masonry.api"
 
 [project]
 name = "casebased"
-version = "0.1.0"
+version = "0.1.2"
 description = "CaseBased is a python library that implements the priciples of case-based reasoning."
 readme = "README.md"
 authors = [
@@ -15,7 +15,7 @@ authors = [
 ]
 license = {file = "LICENSE"}
 urls = {repository = "https://github.com/Case-Based/casebased", homepage = "https://www.casebased.org/"}
-requires-python = "^3.9"
+requires-python = ">=3.9, <4.0"
 dynamic = ["dependencies"]
 keywords = ["CBR", "case-based reasoning", "ML", "Machine Learning"]
 classifiers = [
