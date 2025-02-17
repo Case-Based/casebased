@@ -9,7 +9,7 @@ from casebased.components.similarity_measure import SimilaritySchema
 from casebased.components.vocabulary import Case, Vocabulary
 
 
-@dataclass(frozen=True)
+@dataclass()
 class CaseBasedSystem:
     similarity_schema: SimilaritySchema
     """
@@ -41,6 +41,14 @@ class CaseBasedSystem:
     Define how many cases you want to retrieve. For now this is only a static variable you can define.
     """
     # case_base_maintainer: Optional[CaseBaseMaintainer] = None
+    
+    def train(self):
+        feature_attribute_keys = [feature.name for feature in self.vocabulary.features]
+        
+        self._retriever = Retriever(
+            similarity_schema=self.similarity_schema, case_base=self.case_base, k=self.k
+        )
+        self._retriever.train(feature_attribute_keys)
 
     def retrieve(self, case: Case):
         """
@@ -49,10 +57,7 @@ class CaseBasedSystem:
         if self.vocabulary.validate_case(case) is False:
             raise ValueError("Case is not valid.")
 
-        retriever = Retriever(
-            similarity_schema=self.similarity_schema, case_base=self.case_base, k=self.k
-        )
-        return retriever.retrieve(case)
+        return self._retriever.retrieve(case)
 
     def adapt(
         self, case: Case, similar_cases: Union[list[Case], list[tuple[Case, float]]]

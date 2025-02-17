@@ -1,10 +1,23 @@
-from typing import Mapping, Optional
+from typing import Optional
 
 from dataclasses import dataclass
 
 from casebased import CaseBaseAdapter
 from casebased.components.similarity_measure import SimilaritySchema
-from casebased.components.vocabulary import Case, Vocabulary
+from casebased.components.vocabulary import Case
+from sklearn.neighbors import KNeighborsClassifier
+import numpy as np
+
+class Counter():
+    def __init__(self, total_elements: int):
+        self.count = 0
+        self.total_elements = total_elements
+
+    def increment(self):
+        self.count += 1
+
+    def get_count(self):
+        return self.count, self.total_elements
 
 
 @dataclass()
@@ -49,25 +62,89 @@ class Retriever:
                 least_similar = idx
 
         return least_similar
-
-    def __find_case_index_in_best_cases(
-        self, best_cases: list[tuple[Case, float]], case: Case
-    ) -> Optional[int]:
+    
+    def train(self, feature_attribute_keys: list[str]):
         """
-        Find the index of a case in a list of cases with their respective similarity value.
+        Train the retriever component.
+        """
+        cases: list[Case] = self.case_base.get_all_cases()
+
+        X = np.array([
+            self.__case_to_ndarray(c, feature_attribute_keys)
+            for c in cases
+        ])
+
+        # For labels, we can use dummy indices (since we only need distances)
+        y = np.arange(len(cases))
+
+        def custom_distance_metric(a: np.ndarray, b: np.ndarray, progress_counter: Counter) -> float:
+            """
+            Convert arrays back to Cases and calculate distance as 1.0 - similarity.
+            """
+            progress_counter.increment()
+            count, total = progress_counter.get_count()
+            if count % 1000 == 0:
+                print(f"Progress: {count}/{total} ({round(count/total * 100, 2)}%)")
+            case_a = self.__ndarray_to_case(a, feature_attribute_keys)
+            case_b = self.__ndarray_to_case(b, feature_attribute_keys)
+            similarity = self.similarity_schema.calculate(case_a, case_b)
+            # sklearn requires a distance metric, so we convert similarity to distance
+            distance = 1.0 - similarity
+            return distance
+        
+        progress_counter = Counter(len(X)*6)
+
+        knn = KNeighborsClassifier(
+            n_neighbors=self.k,
+            metric=custom_distance_metric,
+            metric_params={
+                "progress_counter": progress_counter,
+            }
+        )
+
+        knn.fit(X, y)
+
+        self._knn = knn
+
+    def __case_to_ndarray(self, case: Case, feature_order: list[str]) -> np.ndarray:
+        """
+        Convert a Case object into an ndarray representation.
 
         Args:
-            best_cases: A dictionary with cases as keys and their similarity value as values.
-            case: The case to find in the list.
+            case: The Case object to convert.
+            feature_order: List of feature keys in a specific order.
 
         Returns:
-            The index of the case in the list or None.
+            A numpy array representing the case.
         """
-        for idx, (key, _) in enumerate(best_cases):
-            if key == case:
-                return idx
+        feature_values = []
+        
+        for key in feature_order:
+            value = case.feature_attributes.get(key, 0)  # Default to 0 if missing
+            
+            # Convert categorical values to numerical encoding
+            if isinstance(value, str):
+                value = hash(value) % 1000  # Simple hashing for consistency
+            
+            feature_values.append(value)
+        
+        return np.array(feature_values, dtype=np.float32)
 
-        return None
+
+    def __ndarray_to_case(self, array: np.ndarray, feature_order: list[str]) -> Case:
+        """
+        Convert an ndarray representation back into a Case object.
+
+        Args:
+            array: The numpy array to convert.
+            feature_order: List of feature keys in the same order used for encoding.
+
+        Returns:
+            A Case object reconstructed from the array.
+        """
+        feature_attributes = {key: array[i] for i, key in enumerate(feature_order)}
+
+        return Case(feature_attributes=feature_attributes, target_attributes={})
 
     def retrieve(self, case: Case) -> list[tuple[Case, float]]:
         """
@@ -77,22 +154,20 @@ class Retriever:
             case: The case for which to retrieve the k most similar cases.
 
         Returns:
-            A dictionary with the k most similar cases as keys and their similarity value as values.
+            A list of tuples where each tuple contains one of the k most similar Cases
+            and the similarity value.
         """
         cases: list[Case] = self.case_base.get_all_cases()
 
-        k_best_cases: list[tuple[Case, float]] = []
+        knn_instance = self._knn
 
-        for prev_case in cases:
-            similarity = self.similarity_schema.calculate(case, prev_case)
+        query_array = self.__case_to_ndarray(case, case.feature_attributes.keys())
 
-            if len(k_best_cases) < self.k:
-                k_best_cases.append((prev_case, similarity))
-            elif len(k_best_cases) >= self.k:
-                least_similar = self.get_least_similar(k_best_cases)
+        distances, indices = knn_instance.kneighbors([query_array], n_neighbors=self.k)
 
-                if least_similar and similarity < k_best_cases[least_similar]:
-                    del k_best_cases[least_similar]
-                    k_best_cases.append((prev_case, similarity))
+        retrieved_cases: list[tuple[Case, float]] = []
+        for dist, idx in zip(distances[0], indices[0]):
+            sim = 1.0 - dist
+            retrieved_cases.append((cases[idx], sim))
 
-        return k_best_cases
+        return retrieved_cases

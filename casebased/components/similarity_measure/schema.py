@@ -13,7 +13,7 @@ class SimilaritySchema:
     attributes: Mapping[str, SimilarityFunction]
     vocabulary: Vocabulary
 
-    def calculate(self, x: Case, y: Case) -> Mapping[str, float]:
+    def calculate(self, x: Case, y: Case) -> float:
         result = 0.0
         similarities = {}
 
