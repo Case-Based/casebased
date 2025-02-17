@@ -22,6 +22,7 @@ jobs:
       - name: Install dependencies
         run: |
           make poetry-download
+          sudo apt-get install libopenblas-dev
           make install
       - name: Build package
         run: |
