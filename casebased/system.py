@@ -42,13 +42,13 @@ class CaseBasedSystem:
     """
     # case_base_maintainer: Optional[CaseBaseMaintainer] = None
 
-    def train(self):
+    def train(self, jobs: Optional[int] = None):
         feature_attribute_keys = [feature.name for feature in self.vocabulary.features]
 
         self._retriever = Retriever(
             similarity_schema=self.similarity_schema, case_base=self.case_base, k=self.k
         )
-        self._retriever.train(feature_attribute_keys)
+        self._retriever.train(feature_attribute_keys=feature_attribute_keys, jobs=jobs)
 
     def retrieve(self, case: Case):
         """

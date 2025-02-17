@@ -65,7 +65,7 @@ class Retriever:
 
         return least_similar
 
-    def train(self, feature_attribute_keys: list[str]):
+    def train(self, feature_attribute_keys: list[str], jobs: Optional[int] = None):
         """
         Train the retriever component.
         """
@@ -101,6 +101,7 @@ class Retriever:
             metric_params={
                 "progress_counter": progress_counter,
             },
+            n_jobs=jobs,
         )
 
         knn.fit(X, y)
