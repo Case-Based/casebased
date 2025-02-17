@@ -2,13 +2,15 @@ from typing import Optional
 
 from dataclasses import dataclass
 
+import numpy as np
+from sklearn.neighbors import KNeighborsClassifier
+
 from casebased import CaseBaseAdapter
 from casebased.components.similarity_measure import SimilaritySchema
 from casebased.components.vocabulary import Case
-from sklearn.neighbors import KNeighborsClassifier
-import numpy as np
 
-class Counter():
+
+class Counter:
     def __init__(self, total_elements: int):
         self.count = 0
         self.total_elements = total_elements
@@ -62,22 +64,21 @@ class Retriever:
                 least_similar = idx
 
         return least_similar
-    
+
     def train(self, feature_attribute_keys: list[str]):
         """
         Train the retriever component.
         """
         cases: list[Case] = self.case_base.get_all_cases()
 
-        X = np.array([
-            self.__case_to_ndarray(c, feature_attribute_keys)
-            for c in cases
-        ])
+        X = np.array([self.__case_to_ndarray(c, feature_attribute_keys) for c in cases])
 
         # For labels, we can use dummy indices (since we only need distances)
         y = np.arange(len(cases))
 
-        def custom_distance_metric(a: np.ndarray, b: np.ndarray, progress_counter: Counter) -> float:
+        def custom_distance_metric(
+            a: np.ndarray, b: np.ndarray, progress_counter: Counter
+        ) -> float:
             """
             Convert arrays back to Cases and calculate distance as 1.0 - similarity.
             """
@@ -91,15 +92,15 @@ class Retriever:
             # sklearn requires a distance metric, so we convert similarity to distance
             distance = 1.0 - similarity
             return distance
-        
-        progress_counter = Counter(len(X)*6)
+
+        progress_counter = Counter(len(X) * 6)
 
         knn = KNeighborsClassifier(
             n_neighbors=self.k,
             metric=custom_distance_metric,
             metric_params={
                 "progress_counter": progress_counter,
-            }
+            },
         )
 
         knn.fit(X, y)
@@ -118,18 +119,17 @@ class Retriever:
             A numpy array representing the case.
         """
         feature_values = []
-        
+
         for key in feature_order:
             value = case.feature_attributes.get(key, 0)  # Default to 0 if missing
-            
+
             # Convert categorical values to numerical encoding
             if isinstance(value, str):
                 value = hash(value) % 1000  # Simple hashing for consistency
-            
-            feature_values.append(value)
-        
-        return np.array(feature_values, dtype=np.float32)
 
+            feature_values.append(value)
+
+        return np.array(feature_values, dtype=np.float32)
 
     def __ndarray_to_case(self, array: np.ndarray, feature_order: list[str]) -> Case:
         """

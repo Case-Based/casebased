@@ -41,10 +41,10 @@ class CaseBasedSystem:
     Define how many cases you want to retrieve. For now this is only a static variable you can define.
     """
     # case_base_maintainer: Optional[CaseBaseMaintainer] = None
-    
+
     def train(self):
         feature_attribute_keys = [feature.name for feature in self.vocabulary.features]
-        
+
         self._retriever = Retriever(
             similarity_schema=self.similarity_schema, case_base=self.case_base, k=self.k
         )
