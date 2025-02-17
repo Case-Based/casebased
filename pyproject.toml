@@ -5,7 +5,7 @@ build-backend = "poetry.core.masonry.api"
 
 [project]
 name = "casebased"
-version = "0.1.5"
+version = "0.1.6"
 description = "CaseBased is a python library that implements the priciples of case-based reasoning."
 readme = "README.md"
 authors = [
