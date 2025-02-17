@@ -49,8 +49,10 @@ class Retriever:
                 least_similar = idx
 
         return least_similar
-    
-    def __find_case_index_in_best_cases(self, best_cases: list[tuple[Case, float]], case: Case) -> Optional[int]:
+
+    def __find_case_index_in_best_cases(
+        self, best_cases: list[tuple[Case, float]], case: Case
+    ) -> Optional[int]:
         """
         Find the index of a case in a list of cases with their respective similarity value.
 
