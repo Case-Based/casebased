@@ -117,10 +117,10 @@ class Vocabulary:
             bool
         """
         for feature in self.__features:
-            if feature.name not in case.keys():
+            if feature.name not in case.feature_attributes.keys():
                 return False
         for target in self.__targets:
-            if target.name not in case.keys():
+            if target.name not in case.target_attributes.keys():
                 return False
         return True
 
@@ -135,7 +135,7 @@ class Vocabulary:
             bool
         """
         success = True
-        for key, value in case.feature_attributes:
+        for key, value in case.feature_attributes.items():
             if success:
                 attr_definition = self.find_attribute(key)
                 success = attr_definition and attr_definition.validate(value)
@@ -143,8 +143,8 @@ class Vocabulary:
                 break
 
         if success:
-            for key, value in case.target_attributes:
-                if success and not isinstance(value, None):
+            for key, value in case.target_attributes.items():
+                if success and not value is None:
                     attr_definition = self.find_attribute(key)
                     success = attr_definition and attr_definition.validate(value)
                 else:
