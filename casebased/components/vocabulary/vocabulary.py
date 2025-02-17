@@ -100,6 +100,7 @@ class Vocabulary:
         Returns:
             bool
         """
+
         success = True
         success = self.__validate_completeness(case)
         success = self.__validate_attributes(case)

@@ -55,7 +55,7 @@ class CaseBasedSystem:
         return retriever.retrieve(case)
 
     def adapt(
-        self, case: Case, similar_cases: Union[list[Case], Mapping[Case, float]]
+        self, case: Case, similar_cases: Union[list[Case], list[tuple[Case, float]]]
     ) -> Case:
         """
         Used to adapt a previous case solution to solve the new case.
@@ -67,5 +67,5 @@ class CaseBasedSystem:
         This function will add the new case to the case base.
         """
         result = self.case_base.create_case(case)
-        if not isinstance(result, None) and result is False:
+        if not result is None and result is False:
             raise RuntimeError("Case creation task faile")

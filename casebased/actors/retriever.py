@@ -27,7 +27,7 @@ class Retriever:
     How many cases should be returned.
     """
 
-    def get_least_similar(self, cases: Mapping[Case, float]) -> Optional[Case]:
+    def get_least_similar(self, cases: list[tuple[Case, float]]) -> Optional[Case]:
         """
         Get the least similar case in a list of cases with their respective similarity value.
 
@@ -39,18 +39,35 @@ class Retriever:
         """
         least_similar = None
 
-        if len(cases.keys()) == 0:
+        if len(cases) == 0:
             return least_similar
 
-        for key, val in cases.items():
+        for idx, (key, val) in enumerate(cases):
             if least_similar is None:
-                least_similar = key
-            elif val < cases[least_similar]:
-                least_similar = key
+                least_similar = idx
+            elif val < cases[idx][1]:
+                least_similar = idx
 
         return least_similar
+    
+    def __find_case_index_in_best_cases(self, best_cases: list[tuple[Case, float]], case: Case) -> Optional[int]:
+        """
+        Find the index of a case in a list of cases with their respective similarity value.
 
-    def retrieve(self, case: Case) -> Mapping[Case, float]:
+        Args:
+            best_cases: A dictionary with cases as keys and their similarity value as values.
+            case: The case to find in the list.
+
+        Returns:
+            The index of the case in the list or None.
+        """
+        for idx, (key, _) in enumerate(best_cases):
+            if key == case:
+                return idx
+
+        return None
+
+    def retrieve(self, case: Case) -> list[tuple[Case, float]]:
         """
         Simply retrieve the k most similar cases to the provided case.
 
@@ -62,18 +79,18 @@ class Retriever:
         """
         cases: list[Case] = self.case_base.get_all_cases()
 
-        k_best_cases: Mapping[Case, float] = dict()
+        k_best_cases: list[tuple[Case, float]] = []
 
         for prev_case in cases:
             similarity = self.similarity_schema.calculate(case, prev_case)
 
-            if len(k_best_cases.keys()) < self.k:
-                k_best_cases[prev_case] = similarity
-            elif len(k_best_cases.keys()) >= self.k:
+            if len(k_best_cases) < self.k:
+                k_best_cases.append((prev_case, similarity))
+            elif len(k_best_cases) >= self.k:
                 least_similar = self.get_least_similar(k_best_cases)
 
                 if least_similar and similarity < k_best_cases[least_similar]:
                     del k_best_cases[least_similar]
-                    k_best_cases[prev_case] = similarity
+                    k_best_cases.append((prev_case, similarity))
 
         return k_best_cases

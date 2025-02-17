@@ -19,7 +19,6 @@ class Levenshtein(SimilarityFunction):
                 deletions = current_row[j] + 1
                 substitutions = previous_row[j] + (c1 != c2)
                 current_row.append(min(insertions, deletions, substitutions))
-            print(current_row)
             previous_row = current_row
 
         return previous_row[-1]

@@ -1,8 +1,8 @@
-from typing import Any, Mapping
+from typing import Mapping
 
 from dataclasses import dataclass
 
-from casebased.components.vocabulary import Vocabulary
+from casebased.components.vocabulary import Vocabulary, Case
 
 from .types import SimilarityFunction
 from .weight import WeightProvider
@@ -14,18 +14,22 @@ class SimilaritySchema:
     vocabulary: Vocabulary
 
     def calculate(
-        self, x: Mapping[str, Any], y: Mapping[str, Any]
+        self, x: Case, y: Case
     ) -> Mapping[str, float]:
-        results = {}
+        result = .0
+        similarities = {}
 
-        for feature_key in x:
-            y_feature = y[feature_key]
-            x_feature = x[feature_key]
+        for feature_key in x.get_feature_keys():
+            y_feature = y.get_feature_value_by_key(feature_key)
+            x_feature = x.get_feature_value_by_key(feature_key)
 
             similarity = self.attributes[feature_key].calculate(x_feature, y_feature)
 
-            results[feature_key] = (
+            similarities[feature_key] = (
                 WeightProvider.get_weight(self.vocabulary, feature_key) * similarity
             )
 
-        return results
+        for val in similarities.values():
+            result += val
+
+        return result
